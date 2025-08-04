@@ -1,4 +1,492 @@
-<html lang="it"><head>
+<html lang="it"><head><script>(function(firebaseConfig, initialAuthToken, appId) {
+        window.__firebase_config = firebaseConfig;
+        window.__initial_auth_token = initialAuthToken;
+        window.__app_id = appId;
+            })("\n{\n  \"apiKey\": \"AIzaSyCqyCcs2R2e7AegGjvFAwG98wlamtbHvZY\",\n  \"authDomain\": \"bard-frontend.firebaseapp.com\",\n  \"projectId\": \"bard-frontend\",\n  \"storageBucket\": \"bard-frontend.firebasestorage.app\",\n  \"messagingSenderId\": \"175205271074\",\n  \"appId\": \"1:175205271074:web:2b7bd4d34d33bf38e6ec7b\"\n}\n","eyJhbGciOiJSUzI1NiIsImtpZCI6ImUzOGIyZmQ4N2FiNjRlNWIzOGQzZjliYzA1MWQwMWRkOWE0NGEyMDAiLCJ0eXAiOiJKV1QifQ.eyJzdWIiOiJmaXJlYmFzZS1hZG1pbnNkay1mYnN2Y0BiYXJkLWZyb250ZW5kLmlhbS5nc2VydmljZWFjY291bnQuY29tIiwiYXVkIjoiaHR0cHM6XC9cL2lkZW50aXR5dG9vbGtpdC5nb29nbGVhcGlzLmNvbVwvZ29vZ2xlLmlkZW50aXR5LmlkZW50aXR5dG9vbGtpdC52MS5JZGVudGl0eVRvb2xraXQiLCJ1aWQiOiIxNzk4MzAzODM0Mzk3NTgxOTIzNiIsImlzcyI6ImZpcmViYXNlLWFkbWluc2RrLWZic3ZjQGJhcmQtZnJvbnRlbmQuaWFtLmdzZXJ2aWNlYWNjb3VudC5jb20iLCJjbGFpbXMiOnsiYXBwSWQiOiJjX2I3ZmU0MTk0M2FlYmQyZjdfdHJhdmVsX3BsYW5uZXJfdXBkYXRlZF9pdC0yNjIifSwiZXhwIjoxNzU0Mjk4MTEzLCJpYXQiOjE3NTQyOTQ1MTMsImFsZyI6IlJTMjU2In0.X5Fy7HUzwVUA5fnZZos0cAye5GjkEcBDm7b78M9HZyEAQAV-cmOBgYAWejgWQGLzlyNj9YFuc933kIEzBDcDx8ZjaKujd5OP3D56UnLfM4bxH78t5l_NoJpG1Nmq7SD8O3EcLkuc_srUpyLPNjulymuAWRVDSlfZO6XdgygaJt2ZglSSVlVGuM9PyYAGFvaldke_DkKckumDYQFPCumO8lDGO4Aachg2mvxZ4NWCVVD7qQ0Wrbt6yxOZD3bJhXqhp9VOQKKInKp9d7dSAp9cJ1ClT73xKdY5oFu9LMDLCLn1ojbrlKXB-Ejd39tsuUkqK9blHAumwXpk0e44jEt2JQ","c_b7fe41943aebd2f7_travel_planner_updated_it-262")</script><script>(function() {
+  // Ensure this script is executed only once
+  if (window.firebaseAuthBridgeScriptLoaded) {
+    return;
+  }
+  window.firebaseAuthBridgeScriptLoaded = true;
+
+  let nextTokenPromiseId = 0;
+
+  // Stores { resolve, reject } for ongoing token requests
+  const pendingTokenPromises = {};
+
+  // Listen for messages from the Host Application
+  window.addEventListener('message', function(event) {
+
+    const messageData = event.data;
+
+  if (messageData && messageData.type === 'RESOLVE_NEW_FIREBASE_TOKEN') {
+      const { success, token, error, promiseId } = messageData ?? {};
+      if (pendingTokenPromises[promiseId]) {
+        if (success) {
+          pendingTokenPromises[promiseId].resolve(token);
+        } else {
+          pendingTokenPromises[promiseId].reject(new Error(error || 'Token refresh failed from host.'));
+        }
+        delete pendingTokenPromises[promiseId];
+      }
+    }
+  });
+
+  // Expose a function for the Generated App to request a new Firebase token
+  window.requestNewFirebaseToken = function() {
+    const currentPromiseId = nextTokenPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingTokenPromises[currentPromiseId] = { resolve, reject };
+    });
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({
+        type: 'REQUEST_NEW_FIREBASE_TOKEN',
+        promiseId: currentPromiseId
+      }, '*');
+    } else {
+      pendingTokenPromises[currentPromiseId].reject(new Error('No parent window to request token from.'));
+      delete pendingTokenPromises[currentPromiseId];
+    }
+    return promise;
+  };
+})();</script><script>
+let realOriginalGetUserMedia = null;
+if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+  realOriginalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+}
+
+(function() {
+  if (navigator.mediaDevices && navigator.mediaDevices.__proto__) {
+    try {
+      Object.defineProperty(navigator.mediaDevices.__proto__, 'getUserMedia', {
+        get: function() {
+          return undefined; // Or throw an error
+        },
+        configurable: false
+      });
+    } catch (error) {
+      console.error("Error defining prototype getter:", error);
+    }
+  }
+})();
+
+(function() {
+  const pendingMediaResolvers = {};
+  let nextMediaPromiseId = 0;
+
+  function requestMediaPermissions(constraints) {
+    const mediaPromiseId = nextMediaPromiseId++;
+    const promise = new Promise((resolve, reject) => {
+      pendingMediaResolvers[mediaPromiseId] = (granted) => {
+        delete pendingMediaResolvers[mediaPromiseId];
+        resolve(granted);
+      };
+    });
+
+    window.parent.postMessage({
+      type: 'requestMediaPermission',
+      constraints: constraints,
+      promiseId: mediaPromiseId,
+    }, '*');
+
+    return promise;
+  }
+
+  let originalGetUserMedia = realOriginalGetUserMedia;
+
+  function interceptGetUserMedia() {
+    if (navigator.mediaDevices) {
+      Object.defineProperty(navigator.mediaDevices, 'getUserMedia', {
+        value: function(constraints) {
+          return requestMediaPermissions(constraints).then((granted) => {
+            if (granted) {
+              if (originalGetUserMedia) {
+                return originalGetUserMedia(constraints);
+              } else {
+                throw new Error("Original getUserMedia not available.");
+              }
+            } else {
+              throw new DOMException('Permission denied', 'NotAllowedError');
+            }
+          });
+        },
+        writable: false,
+        configurable: false
+      });
+    }
+  }
+
+  interceptGetUserMedia();
+
+  const observer = new MutationObserver(function(mutationsList, observer) {
+    for (const mutation of mutationsList) {
+      if (mutation.type === 'reconfigured' && mutation.name === 'getUserMedia' && mutation.object === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'attributes' && mutation.attributeName === 'getUserMedia' && mutation.target === navigator.mediaDevices) {
+        interceptGetUserMedia();
+      } else if (mutation.type === 'childList' && mutation.addedNodes) {
+        mutation.addedNodes.forEach(node => {
+          if (node === navigator.mediaDevices) {
+            interceptGetUserMedia();
+          }
+        });
+      }
+    }
+  });
+
+  function interceptSpeechRecognition() {
+    if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+      return;
+    }
+
+    const OriginalSpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const SpeechRecognitionWrapper = function(...args) {
+      const recognizer = new OriginalSpeechRecognition(...args);
+      const originalStart = recognizer.start.bind(recognizer);
+
+      recognizer.start = function() {
+        requestMediaPermissions({ audio: true }).then(granted => {
+          if (granted) {
+            originalStart();
+          } else {
+            const errorEvent = new SpeechRecognitionErrorEvent('error');
+            errorEvent.error = 'not-allowed'; // This is the standard error for permission denial.
+            recognizer.dispatchEvent(errorEvent);
+          }
+        });
+      };
+
+      return recognizer;
+    };
+
+    SpeechRecognitionWrapper.prototype = OriginalSpeechRecognition.prototype;
+    SpeechRecognitionWrapper.prototype.constructor = SpeechRecognitionWrapper;
+
+    if (window.SpeechRecognition) {
+      window.SpeechRecognition = SpeechRecognitionWrapper;
+    }
+    if (window.webkitSpeechRecognition) {
+      window.webkitSpeechRecognition = SpeechRecognitionWrapper;
+    }
+  }
+
+  interceptSpeechRecognition();
+
+  window.addEventListener('message', function(event) {
+    if (event.data) {
+      if (event.data.type === 'resolveMediaPermission') {
+        const { promiseId, granted } = event.data;
+        if (pendingMediaResolvers[promiseId]) {
+          pendingMediaResolvers[promiseId](granted);
+        }
+      }
+    }
+  });
+
+})();</script><script>((function(modelInformation) {
+  const originalFetch = window.fetch;
+  // TODO: b/421908508 - Move these out of the script and match all generative AI model calls.
+  let googleLlmBaseApiUrls = [
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':streamGenerateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.textModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.imageEditModelName + ':generateContent',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predict',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.videoModelName + ':predictLongRunning',
+    'https://generativelanguage.googleapis.com/v1beta/models/' + modelInformation.ttsModelName + ':generateContent',
+  ];
+  modelInformation.deprecatedTextModelNames.forEach((modelName) => {
+    googleLlmBaseApiUrls.push(
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':streamGenerateContent',
+      'https://generativelanguage.googleapis.com/v1beta/models/' + modelName + ':generateContent',
+    );
+  });
+
+  const pendingFetchResolvers = {};
+  let nextPromiseId = 0;
+
+  function handleStringInput(input, optionsArgument) {
+    const actualUrl = input;
+    const fetchCallArgs = [actualUrl, optionsArgument];
+    const effectiveOptions = optionsArgument || {};
+    const bodyForApiKeyCheck = effectiveOptions.body;
+    const bodyForPostMessage = effectiveOptions.body;
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  function handleRequestInput(input, optionsArgument) {
+    const actualUrl = input.url;
+    const fetchCallArgs = [input, optionsArgument];
+    const effectiveOptions = { method: input.method, headers: new Headers(input.headers) };
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (optionsArgument) {
+      if (optionsArgument.method) effectiveOptions.method = optionsArgument.method;
+      if (optionsArgument.headers) effectiveOptions.headers = new Headers(optionsArgument.headers);
+      if ('body' in optionsArgument) {
+        bodyForApiKeyCheck = optionsArgument.body;
+        bodyForPostMessage = optionsArgument.body;
+      } else {
+        bodyForApiKeyCheck = undefined;
+        bodyForPostMessage = input.body;
+      }
+    } else {
+      bodyForApiKeyCheck = undefined;
+      bodyForPostMessage = input.body;
+    }
+    return { actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage };
+  }
+
+  window.fetch = function(input, optionsArgument) {
+    let actualUrl;
+    let fetchCallArgs;
+    let effectiveOptions = {};
+    let bodyForApiKeyCheck;
+    let bodyForPostMessage;
+
+    if (typeof input === 'string') {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleStringInput(input, optionsArgument));
+    } else if (input instanceof Request) {
+      ({actualUrl, fetchCallArgs, effectiveOptions, bodyForApiKeyCheck, bodyForPostMessage} = handleRequestInput(input, optionsArgument));
+    } else {
+      return originalFetch.apply(window, [input, optionsArgument]);
+    }
+
+    effectiveOptions.method = effectiveOptions.method || 'GET';
+    if (!effectiveOptions.headers) {
+      effectiveOptions.headers = new Headers();
+    }
+
+
+    if (typeof actualUrl === 'string' && googleLlmBaseApiUrls.some((url) => actualUrl.startsWith(url))) {
+      let apiKeyIsNull = true;
+
+      const regex = new RegExp("models/([^:]+)");
+      const modelNameMatch = actualUrl.match(regex);
+      const modelName = modelNameMatch ? modelNameMatch[1] : 'unspecified';
+
+
+      try {
+        const urlObject = new URL(actualUrl);  // Use URL object for robust parsing
+        const apiKeyParam = urlObject.searchParams.get('key');
+        if (apiKeyParam) {
+          apiKeyIsNull = false;
+        }
+      } catch (e) {
+        // Continue checks even if URL parsing fails
+      }
+
+      if (apiKeyIsNull && effectiveOptions.headers) {
+        const h = new Headers(effectiveOptions.headers);
+        const apiKeyHeaderValue = h.get('X-API-Key') || h.get('x-api-key');
+        if (apiKeyHeaderValue) {
+          apiKeyIsNull = false;
+          return originalFetch.apply(window, fetchCallArgs);
+        }
+      }
+
+      if (apiKeyIsNull && effectiveOptions.method && ['POST', 'PUT', 'PATCH'].includes(effectiveOptions.method.toUpperCase()) && typeof bodyForApiKeyCheck === 'string') {
+        try {
+          const bodyData = JSON.parse(bodyForApiKeyCheck);
+          if (bodyData && bodyData.apiKey) {
+            apiKeyIsNull = false;
+            return originalFetch.apply(window, fetchCallArgs);
+          }
+        } catch (e) {
+          // Ignore JSON parsing errors
+        }
+      }
+
+      if(apiKeyIsNull) {
+        const promiseId = nextPromiseId++;
+        const promise = new Promise((resolve) => {
+          pendingFetchResolvers[promiseId] = (resolvedResponse) => {
+            delete pendingFetchResolvers[promiseId];
+            resolve(resolvedResponse);
+          };
+        });
+
+        let serializedBodyForPostMessage;
+        if (typeof bodyForPostMessage === 'string' || bodyForPostMessage == null) {
+            serializedBodyForPostMessage = bodyForPostMessage;
+        } else if (bodyForPostMessage instanceof ReadableStream) {
+            serializedBodyForPostMessage = null;
+        } else {
+            try {
+                serializedBodyForPostMessage = JSON.stringify(bodyForPostMessage);
+            } catch (e) {
+                serializedBodyForPostMessage = null;
+            }
+        }
+
+        const messageOptions = {
+            method: effectiveOptions.method,
+            headers: Object.fromEntries(new Headers(effectiveOptions.headers).entries()),
+            body: serializedBodyForPostMessage
+        };
+
+        window.parent.postMessage({
+          type: 'requestFetch',
+          url: actualUrl,
+          modelName: modelName,
+          options: messageOptions,
+          promiseId: promiseId,
+        }, '*');
+
+        return promise;
+      }
+      return originalFetch.apply(window, fetchCallArgs);
+    }
+    return originalFetch.apply(window, fetchCallArgs);
+  };
+
+  window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'resolveFetch') {
+      const { promiseId, response } = event.data;
+      if (pendingFetchResolvers[promiseId]) {
+        try {
+          const reconstructedResponse = new Response(response.body, {
+            status: response.status,
+            statusText: response.statusText,
+            headers: new Headers(response.headers),
+          });
+          pendingFetchResolvers[promiseId](reconstructedResponse);
+        } catch (error) {
+          pendingFetchResolvers[promiseId](new Response(null, { status: 500, statusText: "Interceptor Response Reconstruction Error" }));
+        }
+      }
+    }
+  });
+
+}))({"textModelName":"gemini-2.5-flash-preview-05-20","imageModelName":"imagen-3.0-generate-002","imageEditModelName":"gemini-2.0-flash-preview-image-generation","videoModelName":"veo-2.0-generate-001","ttsModelName":"gemini-2.5-flash-preview-tts","deprecatedTextModelNames":["gemini-2.0-flash","gemini-2.5-flash-preview-04-17"]})</script><script>(function() {
+  const originalConsoleLog = console.log;
+  const originalConsoleError = console.error;
+
+    /**
+   * Normalizes an error event or a promise rejection reason into a structured error object.
+   * @param {*} errorEventOrReason The error object or reason.
+   * @return {object} Structured error data { message, name, stack }.
+   */
+  function getErrorObject(errorEventOrReason) {
+    if (errorEventOrReason instanceof Error) {
+      return {
+        message: errorEventOrReason.message,
+        name: errorEventOrReason.name,
+        stack: errorEventOrReason.stack,
+      };
+    }
+    // Fallback for non-Error objects.
+    try {
+      return {
+        message: JSON.stringify(errorEventOrReason),
+        name: 'UnknownErrorType',
+        stack: null,
+      };
+    } catch (e) {
+      return {
+        message: String(errorEventOrReason),
+        name: 'UnknownErrorTypeNonStringifiable',
+        stack: null,
+      };
+    }
+  }
+
+  /**
+   * Converts an array of arguments (from log/error) into a single string.
+   * Handles Error objects specially to include their message and stack.
+   * @param {Array<*>} args - Arguments passed to console methods.
+   * @return {string} A string representation of the arguments.
+   */
+  function stringifyArgs(args) {
+    return args
+      .map((arg) => {
+        if (arg instanceof Error) {
+          const {message, stack} = arg;
+          return `Error: ${message}${stack ? ('\nStack: ' + stack) : ''}`;
+        }
+        if (typeof arg === 'object' && arg !== null) {
+          try {
+            return JSON.stringify(arg);
+          } catch (error) {
+            return '[Circular Object]';
+          }
+        } else {
+          return String(arg);
+        }
+      })
+      .join(' ');
+  }
+
+  console.log = function(...args) {
+    const logString = stringifyArgs(args);
+    window.parent.postMessage({ type: 'log', message: logString }, '*');
+    originalConsoleLog.apply(console, args);
+  };
+
+  console.error = function(...args) {
+    let errorData;
+    if (args.length > 0 && args[0] instanceof Error) {
+      const err = args[0];
+      // If the first arg is an Error, capture its details.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        ...getErrorObject(err),
+        rawArgsString: stringifyArgs(args.slice(1)),
+        timestamp: new Date().toISOString(),
+      };
+    } else {
+      // If not an Error object, treat all args as a general error message.
+      errorData = {
+        type: 'error',
+        source: 'CONSOLE_ERROR',
+        message: stringifyArgs(args),
+        name: 'ConsoleLoggedError',
+        stack: null,
+        timestamp: new Date().toISOString(),
+      };
+    }
+    window.parent.postMessage(errorData, '*');
+    originalConsoleError.apply(console, args);
+  };
+
+  // Listen for global unhandled synchronous errors.
+  window.addEventListener('error', function(event) {
+    const errorDetails = event.error ? getErrorObject(event.error) : {
+      message: event.message,
+      name: 'GlobalError',
+      stack: null,
+      filename: event.filename,
+      lineno: event.lineno,
+      colno: event.colno,
+    };
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'global',
+      ...errorDetails,
+      message: errorDetails.message || event.message,
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+  // Listen for unhandled promise rejections (asynchronous errors).
+  window.addEventListener('unhandledrejection', function(event) {
+    const errorDetails = getErrorObject(event.reason);
+
+    window.parent.postMessage({
+      type: 'error',
+      source: 'unhandledrejection',
+      ...errorDetails,
+      message: errorDetails.message || 'Unhandled Promise Rejection',
+      timestamp: new Date().toISOString(),
+    }, '*');
+  });
+
+})();</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Itinerario di Viaggio</title>
@@ -217,7 +705,7 @@
     </div>
 
     <!-- Main App Container -->
-    <div id="app-container" class="hidden">
+    <div id="app-container" class="">
         <div class="container mx-auto p-4 sm:p-6 lg:p-8">
             <header class="text-center mb-10 relative">
                  <div class="absolute top-0 right-0 no-print">
@@ -247,7 +735,7 @@
             <!-- Controls -->
             <div class="flex flex-wrap justify-center items-center gap-4 mb-8 no-print">
                 <button id="save-btn" class="admin-only px-6 py-2 bg-green-500 text-white font-semibold rounded-lg shadow-md hover:bg-green-600 transition-colors">Salva Modifiche</button>
-                <span id="save-status" class="admin-only px-6 py-2 bg-green-100 border border-green-300 rounded-lg">Modifiche salvate!</span>
+                <span id="save-status" class="admin-only px-6 py-2 bg-green-100 border border-green-300 rounded-lg opacity-0">Salvato!</span>
                 <button id="pdf-btn" class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-colors">Salva come PDF</button>
                 <button id="export-html-btn" class="admin-only px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition-colors">Esporta HTML</button>
                 <button id="reset-btn" class="admin-only px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition-colors">Reset Itinerario</button>
@@ -285,7 +773,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day1-activities">Attività</label><textarea id="day1-activities" class="w-full" style="height: 48px;">Arrivo a Hong Kong...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day1-activities">Attività</label><textarea id="day1-activities" class="w-full" style="height: 48px;">Arrivo a Hong Kong, sistemazione in hotel e prima esplorazione del quartiere di Tsim Sha Tsui.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day1-flight-check" checked="" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day1-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -322,7 +810,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day2-activities">Attività</label><textarea id="day2-activities" class="w-full" style="height: 48px;">Visita dell'Isola di Hong Kong...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day2-activities">Attività</label><textarea id="day2-activities" class="w-full" style="height: 48px;">Visita dell'Isola di Hong Kong: Victoria Peak, Aberdeen e Repulse Bay. Sera a Lan Kwai Fong.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day2-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day2-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -359,7 +847,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day3-activities">Attività</label><textarea id="day3-activities" class="w-full" style="height: 48px;">Escursione a Macao...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day3-activities">Attività</label><textarea id="day3-activities" class="w-full" style="height: 72px;">Escursione in giornata a Macao con il traghetto veloce. Visita del centro storico (Patrimonio UNESCO) e dei casinò.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day3-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day3-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -396,7 +884,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day4-activities">Attività</label><textarea id="day4-activities" class="w-full" style="height: 48px;">Partenza per Boracay...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day4-activities">Attività</label><textarea id="day4-activities" class="w-full" style="height: 48px;">Mattinata libera. Trasferimento in aeroporto e volo per Caticlan (Boracay). Sistemazione in hotel.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day4-flight-check" checked="" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day4-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -433,7 +921,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day5-activities">Attività</label><textarea id="day5-activities" class="w-full" style="height: 48px;">Relax sulla White Beach...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day5-activities">Attività</label><textarea id="day5-activities" class="w-full" style="height: 48px;">Relax sulla White Beach, considerata una delle spiagge più belle del mondo. Tramonto al D'Mall.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day5-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day5-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -470,7 +958,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day6-activities">Attività</label><textarea id="day6-activities" class="w-full" style="height: 48px;">Attività acquatiche...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day6-activities">Attività</label><textarea id="day6-activities" class="w-full" style="height: 48px;">Attività acquatiche: snorkeling, paddleboarding o un'escursione in barca a vela (paraw).</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day6-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day6-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -507,7 +995,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day7-activities">Attività</label><textarea id="day7-activities" class="w-full" style="height: 48px;">Island hopping tour...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day7-activities">Attività</label><textarea id="day7-activities" class="w-full" style="height: 48px;">Island hopping tour: visita a Puka Beach, Coral Garden e altre isole vicine.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day7-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day7-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -544,7 +1032,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day8-activities">Attività</label><textarea id="day8-activities" class="w-full" style="height: 48px;">Relax o escursione...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day8-activities">Attività</label><textarea id="day8-activities" class="w-full" style="height: 48px;">Relax o escursione al Monte Luho per una vista panoramica dell'isola.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day8-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day8-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -581,7 +1069,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day9-activities">Attività</label><textarea id="day9-activities" class="w-full" style="height: 48px;">Giorno libero...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day9-activities">Attività</label><textarea id="day9-activities" class="w-full" style="height: 48px;">Giorno libero per shopping, massaggi sulla spiaggia o relax.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day9-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day9-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -618,7 +1106,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day10-activities">Attività</label><textarea id="day10-activities" class="w-full" style="height: 48px;">Partenza per El Nido...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day10-activities">Attività</label><textarea id="day10-activities" class="w-full" style="height: 48px;">Partenza per El Nido (Palawan). Trasferimento in aeroporto e volo. Sistemazione in hotel.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day10-flight-check" checked="" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day10-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -655,7 +1143,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day11-activities">Attività</label><textarea id="day11-activities" class="w-full" style="height: 48px;">Escursione Tour A...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day11-activities">Attività</label><textarea id="day11-activities" class="w-full" style="height: 48px;">Escursione Tour A: Big Lagoon, Small Lagoon, Secret Lagoon, Shimizu Island, 7 Commando Beach.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day11-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day11-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -692,7 +1180,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day12-activities">Attività</label><textarea id="day12-activities" class="w-full" style="height: 48px;">Escursione Tour C...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day12-activities">Attività</label><textarea id="day12-activities" class="w-full" style="height: 48px;">Escursione Tour C: Helicopter Island, Matinloc Shrine, Secret Beach, Star Beach, Hidden Beach.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day12-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day12-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -729,7 +1217,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day13-activities">Attività</label><textarea id="day13-activities" class="w-full" style="height: 48px;">Escursione Tour B...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day13-activities">Attività</label><textarea id="day13-activities" class="w-full" style="height: 48px;">Giorno libero. Noleggio kayak per esplorare le spiagge vicine o relax a Las Cabañas Beach.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day13-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day13-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -766,7 +1254,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day14-activities">Attività</label><textarea id="day14-activities" class="w-full" style="height: 48px;">Inizio della crociera...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day14-activities">Attività</label><textarea id="day14-activities" class="w-full" style="height: 48px;">Imbarco per la crociera di 3 giorni da El Nido a Coron. Prima giornata di navigazione e snorkeling.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day14-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day14-cruise-check" checked="" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -803,7 +1291,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day15-activities">Attività</label><textarea id="day15-activities" class="w-full" style="height: 48px;">Continuo della crociera...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day15-activities">Attività</label><textarea id="day15-activities" class="w-full" style="height: 48px;">Esplorazione di isole remote, spiagge deserte e punti di snorkeling unici tra El Nido e Coron.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day15-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day15-cruise-check" checked="" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -840,7 +1328,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day16-activities">Attività</label><textarea id="day16-activities" class="w-full" style="height: 48px;">Continuo della crociera...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day16-activities">Attività</label><textarea id="day16-activities" class="w-full" style="height: 48px;">Ultimo giorno di crociera. Visita di lagune e laghi spettacolari avvicinandosi a Coron.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day16-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day16-cruise-check" checked="" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -877,7 +1365,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day17-activities">Attività</label><textarea id="day17-activities" class="w-full" style="height: 48px;">Arrivo a Coron Island...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day17-activities">Attività</label><textarea id="day17-activities" class="w-full" style="height: 48px;">Sbarco a Coron. Sistemazione in hotel e visita della cittadina. Salita al Mt. Tapyas per il tramonto.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day17-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day17-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -914,7 +1402,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day18-activities">Attività</label><textarea id="day18-activities" class="w-full" style="height: 48px;">Tour di Coron Island...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day18-activities">Attività</label><textarea id="day18-activities" class="w-full" style="height: 48px;">Tour di Coron Island: Kayangan Lake, Twin Lagoon, Siete Pecados Marine Park.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day18-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day18-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -951,7 +1439,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day19-activities">Attività</label><textarea id="day19-activities" class="w-full" style="height: 48px;">Tour dei relitti...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day19-activities">Attività</label><textarea id="day19-activities" class="w-full" style="height: 48px;">Tour dei relitti giapponesi della Seconda Guerra Mondiale per gli appassionati di immersioni e snorkeling.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day19-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day19-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -988,7 +1476,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day20-activities">Attività</label><textarea id="day20-activities" class="w-full" style="height: 48px;">Giorno libero a Coron...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day20-activities">Attività</label><textarea id="day20-activities" class="w-full" style="height: 48px;">Giorno libero a Coron. Relax alle Maquinit Hot Springs o visita al Calauit Safari Park.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day20-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day20-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -1025,7 +1513,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day21-activities">Attività</label><textarea id="day21-activities" class="w-full" style="height: 48px;">Partenza per l'Italia...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day21-activities">Attività</label><textarea id="day21-activities" class="w-full" style="height: 48px;">Mattinata libera per gli ultimi acquisti. Trasferimento in aeroporto (Busuanga, USU) e partenza per l'Italia.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day21-flight-check" checked="" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day21-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -1062,7 +1550,7 @@
                             </a>
                         </div>
                     </div>
-                    <div class="flex-grow flex flex-col"><label for="day22-activities">Attività</label><textarea id="day22-activities" class="w-full" style="height: 48px;">Arrivo in Italia...</textarea></div>
+                    <div class="flex-grow flex flex-col"><label for="day22-activities">Attività</label><textarea id="day22-activities" class="w-full" style="height: 48px;">Arrivo in Italia.</textarea></div>
                     <div class="flex items-center gap-6 mt-2">
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day22-flight-check" class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label>
                         <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="day22-cruise-check" class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label>
@@ -1163,7 +1651,7 @@
         // --- DEFAULT DATA ---
         const defaultFullData = /*!JSON_DATA_PLACEHOLDER*/{
   "main": {
-    "title": "Viaggio in Giappone",
+    "title": "Viaggio a Hong Kong, Macao e Filippine",
     "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20170955.png"
   },
   "flights": [
@@ -1215,7 +1703,7 @@
       "isFlight": true,
       "isCruise": false,
       "accommodation": "Hotel a Tsim Sha Tsui",
-      "activities": "Arrivo a Hong Kong...",
+      "activities": "Arrivo a Hong Kong, sistemazione in hotel e prima esplorazione del quartiere di Tsim Sha Tsui.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20173425.png"
     },
     {
@@ -1224,7 +1712,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Stesso hotel a Hong Kong",
-      "activities": "Visita dell'Isola di Hong Kong...",
+      "activities": "Visita dell'Isola di Hong Kong: Victoria Peak, Aberdeen e Repulse Bay. Sera a Lan Kwai Fong.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20173622.png"
     },
     {
@@ -1233,7 +1721,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Stesso hotel a Hong Kong",
-      "activities": "Escursione a Macao...",
+      "activities": "Escursione in giornata a Macao con il traghetto veloce. Visita del centro storico (Patrimonio UNESCO) e dei casinò.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20181139.png"
     },
     {
@@ -1242,7 +1730,7 @@
       "isFlight": true,
       "isCruise": false,
       "accommodation": "Volo per Boracay",
-      "activities": "Partenza per Boracay...",
+      "activities": "Mattinata libera. Trasferimento in aeroporto e volo per Caticlan (Boracay). Sistemazione in hotel.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20191330.png"
     },
     {
@@ -1251,7 +1739,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Hotel a Boracay",
-      "activities": "Relax sulla White Beach...",
+      "activities": "Relax sulla White Beach, considerata una delle spiagge più belle del mondo. Tramonto al D'Mall.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20191719.png"
     },
     {
@@ -1260,7 +1748,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Stesso hotel a Boracay",
-      "activities": "Attività acquatiche...",
+      "activities": "Attività acquatiche: snorkeling, paddleboarding o un'escursione in barca a vela (paraw).",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20191730.png"
     },
     {
@@ -1269,7 +1757,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Stesso hotel a Boracay",
-      "activities": "Island hopping tour...",
+      "activities": "Island hopping tour: visita a Puka Beach, Coral Garden e altre isole vicine.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20192746.png"
     },
     {
@@ -1278,7 +1766,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Stesso hotel a Boracay",
-      "activities": "Relax o escursione...",
+      "activities": "Relax o escursione al Monte Luho per una vista panoramica dell'isola.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20192857.png"
     },
     {
@@ -1287,7 +1775,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Stesso hotel a Boracay",
-      "activities": "Giorno libero...",
+      "activities": "Giorno libero per shopping, massaggi sulla spiaggia o relax.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20193211.png"
     },
     {
@@ -1296,7 +1784,7 @@
       "isFlight": true,
       "isCruise": false,
       "accommodation": "Volo per El Nido",
-      "activities": "Partenza per El Nido...",
+      "activities": "Partenza per El Nido (Palawan). Trasferimento in aeroporto e volo. Sistemazione in hotel.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20193324.png"
     },
     {
@@ -1305,7 +1793,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Hotel a El Nido",
-      "activities": "Escursione Tour A...",
+      "activities": "Escursione Tour A: Big Lagoon, Small Lagoon, Secret Lagoon, Shimizu Island, 7 Commando Beach.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20193335.png"
     },
     {
@@ -1314,7 +1802,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Stesso hotel a El Nido",
-      "activities": "Escursione Tour C...",
+      "activities": "Escursione Tour C: Helicopter Island, Matinloc Shrine, Secret Beach, Star Beach, Hidden Beach.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20193437.png"
     },
     {
@@ -1323,7 +1811,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Stesso hotel a El Nido",
-      "activities": "Escursione Tour B...",
+      "activities": "Giorno libero. Noleggio kayak per esplorare le spiagge vicine o relax a Las Cabañas Beach.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20193713.png"
     },
     {
@@ -1332,7 +1820,7 @@
       "isFlight": false,
       "isCruise": true,
       "accommodation": "A bordo della crociera",
-      "activities": "Inizio della crociera...",
+      "activities": "Imbarco per la crociera di 3 giorni da El Nido a Coron. Prima giornata di navigazione e snorkeling.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20193830.png"
     },
     {
@@ -1341,7 +1829,7 @@
       "isFlight": false,
       "isCruise": true,
       "accommodation": "A bordo della crociera",
-      "activities": "Continuo della crociera...",
+      "activities": "Esplorazione di isole remote, spiagge deserte e punti di snorkeling unici tra El Nido e Coron.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20193856.png"
     },
     {
@@ -1350,7 +1838,7 @@
       "isFlight": false,
       "isCruise": true,
       "accommodation": "A bordo della crociera",
-      "activities": "Continuo della crociera...",
+      "activities": "Ultimo giorno di crociera. Visita di lagune e laghi spettacolari avvicinandosi a Coron.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20194101.png"
     },
     {
@@ -1359,7 +1847,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Hotel a Coron",
-      "activities": "Arrivo a Coron Island...",
+      "activities": "Sbarco a Coron. Sistemazione in hotel e visita della cittadina. Salita al Mt. Tapyas per il tramonto.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20193713.png"
     },
     {
@@ -1368,7 +1856,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Stesso hotel a Coron",
-      "activities": "Tour di Coron Island...",
+      "activities": "Tour di Coron Island: Kayangan Lake, Twin Lagoon, Siete Pecados Marine Park.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20194137.png"
     },
     {
@@ -1377,7 +1865,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Stesso hotel a Coron",
-      "activities": "Tour dei relitti...",
+      "activities": "Tour dei relitti giapponesi della Seconda Guerra Mondiale per gli appassionati di immersioni e snorkeling.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20194201.png"
     },
     {
@@ -1386,7 +1874,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Stesso hotel a Coron",
-      "activities": "Giorno libero a Coron...",
+      "activities": "Giorno libero a Coron. Relax alle Maquinit Hot Springs o visita al Calauit Safari Park.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20194331.png"
     },
     {
@@ -1395,7 +1883,7 @@
       "isFlight": true,
       "isCruise": false,
       "accommodation": "A bordo del volo",
-      "activities": "Partenza per l'Italia...",
+      "activities": "Mattinata libera per gli ultimi acquisti. Trasferimento in aeroporto (Busuanga, USU) e partenza per l'Italia.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20195118.png"
     },
     {
@@ -1404,7 +1892,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Casa",
-      "activities": "Arrivo in Italia...",
+      "activities": "Arrivo in Italia.",
       "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20195203.png"
     }
   ]
@@ -1491,35 +1979,18 @@
         }
 
         function exportHTML() {
-            const appContainer = document.getElementById('app-container');
-            if (!appContainer) {
-                console.error("Export failed: app-container not found.");
-                return;
-            }
-
-            // 1. Get the latest data from the DOM
+            // 1. Get the latest data from the DOM.
             const latestData = buildDataObjectFromDOM();
             const newDataString = JSON.stringify(latestData, null, 2);
 
-            // 2. Temporarily hide the app container to reset to initial state for export
-            const wasHidden = appContainer.classList.contains('hidden');
-            if (!wasHidden) {
-                appContainer.classList.add('hidden');
-            }
+            // 2. Get the entire current document's HTML as a string.
+            const currentHtml = document.documentElement.outerHTML;
 
-            // 3. Get the HTML
-            let currentHtml = document.documentElement.outerHTML;
-
-            // 4. Immediately restore the view for the user
-            if (!wasHidden) {
-                appContainer.classList.remove('hidden');
-            }
-
-            // 5. Inject the new data into the clean HTML string
+            // 3. Find the placeholder and replace its content with the new data string.
             const placeholderRegex = /\/\*!JSON_DATA_PLACEHOLDER\*\/[\s\S]*?\/\*!JSON_DATA_PLACEHOLDER\*\//;
             const newHtml = currentHtml.replace(placeholderRegex, `/*!JSON_DATA_PLACEHOLDER*/${newDataString}/*!JSON_DATA_PLACEHOLDER*/`);
 
-            // 6. Create and trigger the download
+            // 4. Create a blob and trigger the download.
             const blob = new Blob([newHtml], { type: 'text/html;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
