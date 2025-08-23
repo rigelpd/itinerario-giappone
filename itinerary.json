@@ -1,303 +1,455 @@
 {
   "main": {
-    "title": "Viaggio in Giappone",
-    "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/giappone.jpg"
+    "title": "Viaggio a Hong Kong, Macao e Filippine",
+    "image": "https://raw.githubusercontent.com/rigelpd/mio-itinerario/main/Screenshot%202025-08-02%20170955.png"
   },
   "flights": [
     {
-      "idPrefix": "flight_1755869495377",
-      "title": "Volo Bologna→Tokyo",
+      "idPrefix": "out",
+      "title": "Volo di Andata: Bologna → Hong Kong",
       "depAirport": "Aeroporto di Bologna (BLQ)",
-      "arrAirport": "Aeroporto di Tokyo (HND)",
-      "depTime": "2025-11-14T19:35",
-      "arrTime": "2025-11-15T19:45",
+      "arrAirport": "Aeroporto Internazionale di Hong Kong (HKG)",
+      "depTime": "2026-02-27T19:35",
+      "arrTime": "2026-02-28T17:05",
       "depTz": 1,
-      "arrTz": 9
+      "arrTz": 8
     },
     {
-      "idPrefix": "flight_1755869498321",
-      "title": "Kansai(Osaka)→Bologna",
-      "depAirport": "Aeroporto internazionale del Kansai (KIX)",
+      "idPrefix": "int1",
+      "title": "Volo: Hong Kong → Cebu City",
+      "depAirport": "Aeroporto di Hong Kong (HKG)",
+      "arrAirport": "Aeroporto di Lapu-Lapu (CEB)",
+      "depTime": "2026-03-03T19:25",
+      "arrTime": "2026-03-03T22:10",
+      "depTz": 8,
+      "arrTz": 8
+    },
+    {
+      "idPrefix": "int2",
+      "title": "Volo: Cebu City→ Busuanga (Coron island)",
+      "depAirport": "Aeroporto di Lapu-Lapu (CEB)",
+      "arrAirport": "Aeroporto di Busuanga (USU)",
+      "depTime": "2026-03-10T13:40",
+      "arrTime": "2026-03-10T15:20",
+      "depTz": 8,
+      "arrTz": 8
+    },
+    {
+      "idPrefix": "ret",
+      "title": "Volo di Ritorno: El Nido→ Manila",
+      "depAirport": "Aeroporto di El Nido (ENI)",
+      "arrAirport": "Aeroporto di Manila (MNL)",
+      "depTime": "2026-03-21T15:50",
+      "arrTime": "2026-03-21T17:20",
+      "depTz": 8,
+      "arrTz": 8
+    },
+    {
+      "idPrefix": "flight_1755862310246",
+      "title": "Volo di Ritorno: Manila→Bologna",
+      "depAirport": "Aeroporto di Manila (MNL)",
       "arrAirport": "Aeroporto di Bologna (BLQ)",
-      "depTime": "2025-11-29T22:50",
-      "arrTime": "2025-11-30T09:55",
-      "depTz": 9,
+      "depTime": "2026-03-21T23:30",
+      "arrTime": "2026-03-22T12:40",
+      "depTz": 8,
       "arrTz": 1
     }
   ],
   "itinerary": [
     {
-      "date": "2025-11-14",
+      "date": "2026-02-27",
+      "location": "Bologna ",
+      "isFlight": true,
+      "isCruise": false,
+      "accommodation": "Casa",
+      "activities": "Partenza da Bologna alle 19:35, volo Turkish per Hong Kong.",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20195203.png",
+      "location_coords": {
+        "lat": 44.494586,
+        "lng": 11.342505
+      }
+    },
+    {
+      "date": "2026-02-28",
+      "location": "Hong Kong",
+      "isFlight": true,
+      "isCruise": false,
+      "accommodation": "Lan Kwai Fong Hotel",
+      "activities": "Arrivo con il volo alle 17:05. Andiamo in albergo e dormiamo",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20173425.png",
+      "location_coords": {
+        "lat": 22.306144,
+        "lng": 114.1333
+      },
+      "accommodation_coords": {
+        "lat": 22.284615,
+        "lng": 114.153177
+      }
+    },
+    {
+      "date": "2026-03-01",
+      "location": "Hong Kong",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": "Lan Kwai Fong Hotel",
+      "activities": "Hong Kong tutto il giorno",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20173622.png",
+      "location_coords": {
+        "lat": 22.306144,
+        "lng": 114.1333
+      },
+      "accommodation_coords": {
+        "lat": 22.284615,
+        "lng": 114.153177
+      }
+    },
+    {
+      "date": "2026-03-02",
+      "location": "Hong Kong",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": "Lan Kwai Fong Hotel",
+      "activities": "Macao e Hong Kong",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20181139.png",
+      "location_coords": {
+        "lat": 22.306144,
+        "lng": 114.1333
+      },
+      "accommodation_coords": {
+        "lat": 22.284615,
+        "lng": 114.153177
+      }
+    },
+    {
+      "date": "2026-03-03",
+      "location": "Cebu City",
+      "isFlight": true,
+      "isCruise": false,
+      "accommodation": "Sempre Premier Inn - MACTAN AIRPORT HOTEL",
+      "activities": "Mattina e primo pomeriggio ad Hong Kong, volo diretto per Cebu Island, partenza alle 19:25 e arrivo a Cebu City alle 22:10. Si dorme, il giorno dopo sveglia presto.",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20191330.png",
+      "location_coords": {
+        "lat": 10.294421,
+        "lng": 123.89191
+      },
+      "accommodation_coords": {
+        "lat": 10.319456,
+        "lng": 123.962832
+      }
+    },
+    {
+      "date": "2026-03-04",
+      "location": "Bantayan",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": " The Coral Blue Oriental Beach Villas and Suites",
+      "activities": "Autobus mattina presto per Bantayan, arrivo previsto ore 13-14. Pomeriggio in spiaggia",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-12%20204241.jpg",
+      "location_coords": {
+        "lat": 11.178792,
+        "lng": 123.740513
+      },
+      "accommodation_coords": {
+        "lat": 11.157514,
+        "lng": 123.807944
+      }
+    },
+    {
+      "date": "2026-03-05",
+      "location": "Bantayan",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": " The Coral Blue Oriental Beach Villas and Suites",
+      "activities": "",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-12%20204331.jpg",
+      "location_coords": {
+        "lat": 11.178792,
+        "lng": 123.740513
+      },
+      "accommodation_coords": {
+        "lat": 11.157514,
+        "lng": 123.807944
+      }
+    },
+    {
+      "date": "2026-03-06",
+      "location": "Bantayan",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": " The Coral Blue Oriental Beach Villas and Suites",
+      "activities": "",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-12%20204653.jpg",
+      "location_coords": {
+        "lat": 11.178792,
+        "lng": 123.740513
+      },
+      "accommodation_coords": {
+        "lat": 11.157514,
+        "lng": 123.807944
+      }
+    },
+    {
+      "date": "2026-03-07",
+      "location": "Bantayan",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": " The Coral Blue Oriental Beach Villas and Suites",
+      "activities": "",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-12%20204424.jpg",
+      "location_coords": {
+        "lat": 11.178792,
+        "lng": 123.740513
+      },
+      "accommodation_coords": {
+        "lat": 11.157514,
+        "lng": 123.807944
+      }
+    },
+    {
+      "date": "2026-03-08",
+      "location": "Bantayan",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": " The Coral Blue Oriental Beach Villas and Suites",
+      "activities": "",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-12%20204724.jpg",
+      "location_coords": {
+        "lat": 11.178792,
+        "lng": 123.740513
+      },
+      "accommodation_coords": {
+        "lat": 11.157514,
+        "lng": 123.807944
+      }
+    },
+    {
+      "date": "2026-03-09",
+      "location": "Bantayan",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": " The Coral Blue Oriental Beach Villas and Suites",
+      "activities": "",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-12%20204547.jpg",
+      "location_coords": {
+        "lat": 11.178792,
+        "lng": 123.740513
+      },
+      "accommodation_coords": {
+        "lat": 11.157514,
+        "lng": 123.807944
+      }
+    },
+    {
+      "date": "2026-03-10",
+      "location": "Coron Island",
+      "isFlight": true,
+      "isCruise": false,
+      "accommodation": "Two Seasons Coron Bayside Hotel",
+      "activities": "Partenza la mattina presto dall'albergo per essere alle 5 del mattino a Bantayan town, da li autobus che porta a Cebu City. Volo dall'aeroporto di Cebu per Busuanga (coron island) che parte alle 13:40 e arriva a Busuanga alle 15:20. Poi un ora per arrivare all'Hotel.",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20194137.png",
+      "location_coords": {
+        "lat": 12.071319,
+        "lng": 120.17564
+      },
+      "accommodation_coords": {
+        "lat": 11.993522,
+        "lng": 120.210968
+      }
+    },
+    {
+      "date": "2026-03-11",
+      "location": "Coron Island",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": "Two Seasons Coron Bayside Hotel",
+      "activities": "",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20194201.png",
+      "location_coords": {
+        "lat": 12.071319,
+        "lng": 120.17564
+      },
+      "accommodation_coords": {
+        "lat": 11.993522,
+        "lng": 120.210968
+      }
+    },
+    {
+      "date": "2026-03-12",
+      "location": "Coron Island",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": "Two Seasons Coron Bayside Hotel",
+      "activities": "Escursione Tour C...",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20194954.png",
+      "location_coords": {
+        "lat": 12.071319,
+        "lng": 120.17564
+      },
+      "accommodation_coords": {
+        "lat": 11.993522,
+        "lng": 120.210968
+      }
+    },
+    {
+      "date": "2026-03-13",
+      "location": "Coron Island",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": "Two Seasons Coron Bayside Hotel",
+      "activities": "Escursione Tour B...",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20193713.png",
+      "location_coords": {
+        "lat": 12.071319,
+        "lng": 120.17564
+      },
+      "accommodation_coords": {
+        "lat": 11.993522,
+        "lng": 120.210968
+      }
+    },
+    {
+      "date": "2026-03-14",
+      "location": "In Crociera",
+      "isFlight": false,
+      "isCruise": true,
+      "accommodation": "A bordo della crociera",
+      "activities": "crociera da Coron a El Nido",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20194013.png",
+      "location_coords": {
+        "lat": 11.512573,
+        "lng": 119.79188
+      },
+      "accommodation_coords": {
+        "lat": 11.512573,
+        "lng": 119.79188
+      }
+    },
+    {
+      "date": "2026-03-15",
+      "location": "In Crociera",
+      "isFlight": false,
+      "isCruise": true,
+      "accommodation": "A bordo della crociera",
+      "activities": "crociera da Coron a El Nido",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20194101.png",
+      "location_coords": {
+        "lat": 11.512573,
+        "lng": 119.79188
+      },
+      "accommodation_coords": {
+        "lat": 11.512573,
+        "lng": 119.79188
+      }
+    },
+    {
+      "date": "2026-03-16",
+      "location": "El Nido",
+      "isFlight": false,
+      "isCruise": true,
+      "accommodation": "Mahogany Resort & Spa",
+      "activities": "crociera da Coron a El Nido, arrivo all'hotel nel pomeriggio tardi",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20193830.png",
+      "location_coords": {
+        "lat": 11.19317,
+        "lng": 119.420591
+      },
+      "accommodation_coords": {
+        "lat": 11.165194,
+        "lng": 119.397679
+      }
+    },
+    {
+      "date": "2026-03-17",
+      "location": "El Nido",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": "Mahogany Resort & Spa",
+      "activities": "tour El Nido",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20193530.png",
+      "location_coords": {
+        "lat": 11.19317,
+        "lng": 119.420591
+      },
+      "accommodation_coords": {
+        "lat": 11.165194,
+        "lng": 119.397679
+      }
+    },
+    {
+      "date": "2026-03-18",
+      "location": "El Nido",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": "Mahogany Resort & Spa",
+      "activities": "",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20193324.png",
+      "location_coords": {
+        "lat": 11.19317,
+        "lng": 119.420591
+      },
+      "accommodation_coords": {
+        "lat": 11.165194,
+        "lng": 119.397679
+      }
+    },
+    {
+      "date": "2026-03-19",
+      "location": "El Nido",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": "Mahogany Resort & Spa",
+      "activities": "",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20193335.png",
+      "location_coords": {
+        "lat": 11.19317,
+        "lng": 119.420591
+      },
+      "accommodation_coords": {
+        "lat": 11.165194,
+        "lng": 119.397679
+      }
+    },
+    {
+      "date": "2026-03-20",
+      "location": "El Nido",
+      "isFlight": false,
+      "isCruise": false,
+      "accommodation": "Mahogany Resort & Spa",
+      "activities": "",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20193437.png",
+      "location_coords": {
+        "lat": 11.19317,
+        "lng": 119.420591
+      },
+      "accommodation_coords": {
+        "lat": 11.165194,
+        "lng": 119.397679
+      }
+    },
+    {
+      "date": "2026-03-21",
+      "location": "Manila",
+      "isFlight": true,
+      "isCruise": false,
+      "accommodation": "A bordo del volo",
+      "activities": "Partenza da El Nido alle 15:50, scalo a Manila, dovremo scaricare i bagagli e ricaricarli nell'altro volo. Volo Emirates alle 23:30 per Bologna con scalo a Dubai. ",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20195118.png",
+      "location_coords": {
+        "lat": 14.59896,
+        "lng": 120.98917
+      }
+    },
+    {
+      "date": "2026-03-22",
       "location": "Bologna",
       "isFlight": true,
       "isCruise": false,
       "accommodation": "Casa",
-      "activities": "Partenza dall'aeroporto di Bologna alle 19:35. Arriveremo con almeno 3 ore di anticipo per check-in e controlli.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/casa.png",
+      "activities": "Arrivo a Bologna alle 12:40 del mattino.",
+      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-filippine/main/Screenshot%202025-08-02%20195203.png",
       "location_coords": {
-        "lat": 44.49421141,
-        "lng": 11.34341832
-      }
-    },
-    {
-      "date": "2025-11-15",
-      "location": "Tokyo",
-      "isFlight": true,
-      "isCruise": false,
-      "accommodation": "Hotel Sunroute Plaza Shinjuku",
-      "activities": "Atterreremo all'aeroporto di Tokyo (HND) alle 19:45 ora locale. Sbrigate le formalità doganali, raggiungeremo I'Hotel Sunroute Plaza Shinjuku in taxi o con il comodo \"Limousine Bus\". Dopo il check-in, avremo la serata libera per una prima passeggiata e una cena nel vivace quartiere di Shinjuku.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20183810.png",
-      "location_coords": {
-        "lat": 35.6768601,
-        "lng": 139.7638947
-      },
-      "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
-      }
-    },
-    {
-      "date": "2025-11-16",
-      "location": "Tokyo",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "Hotel Sunroute Plaza Shinjuku",
-      "activities": "Dedichiamo la giornata all'esplorazione dei quartieri iconici di Tokyo. Iniziamo con l'ipnotico incrocio di Shibuya e la statua di Hachiko. Proseguiamo per Harajuku, passeggiando lungo la vivace Takeshita Street, cuore della cultura giovanile. Concludiamo la giornata nella quiete del vicino Santuario Meiji Jingu, un'oasi di pace immersa in una foresta.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/tokyo.jpg",
-      "location_coords": {
-        "lat": 35.6768601,
-        "lng": 139.7638947
-      },
-      "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
-      }
-    },
-    {
-      "date": "2025-11-17",
-      "location": "Tokyo",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "Hotel Sunroute Plaza Shinjuku",
-      "activities": "Esploriamo la parte più tradizionale di Tokyo. La mattina visitiamo Asakusa, con il suo Tempio Senso-ji e la via dello shopping Nakamise-dori. Successivamente, ci spostiamo al Parco di Ueno, dove potremo visitare musei o lo zoo. Nel pomeriggio, ci immergiamo nella cultura \"otaku\" di Akihabara, il quartiere dell'elettronica, dei manga e degli anime.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184018.png",
-      "location_coords": {
-        "lat": 35.6768601,
-        "lng": 139.7638947
-      },
-      "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
-      }
-    },
-    {
-      "date": "2025-11-18",
-      "location": "Nikko",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "Hotel Sunroute Plaza Shinjuku",
-      "activities": "Giornata dedicata all'escursione a Nikko, sito UNESCO. Partiamo presto da Asakusa con i treni Tobu (consigliato il \"Nikko Pass\", viaggio di circa 2 ore). Arrivati, un bus locale porterà ai templi. Visitiamo il sontuoso Santuario Toshogu, il Tempio Rinnoji e il Santuario Futarasan. Nel pomeriggio, ammiriamo il ponte Shinkyo prima di riprendere il treno per Tokyo.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184253.png",
-      "location_coords": {
-        "lat": 36.7197576,
-        "lng": 139.698139
-      },
-      "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
-      }
-    },
-    {
-      "date": "2025-11-19",
-      "location": "Tokyo",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "Hotel Sunroute Plaza Shinjuku",
-      "activities": "Iniziamo la giornata con una colazione al Mercato Esterno di Tsukiji. Proseguiamo verso Ginza, il quartiere del lusso, per ammirare le vetrine e le architetture. Nel pomeriggio,\nvisitiamo i tranquilli Giardini Orientali del Palazzo Imperiale. Concludiamo la giornata sulla Tokyo Skytree (prenotazione consigliata) per una vista mozzafiato al tramonto.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184319.png",
-      "location_coords": {
-        "lat": 35.6768601,
-        "lng": 139.7638947
-      },
-      "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
-      }
-    },
-    {
-      "date": "2025-11-20",
-      "location": "Hakone",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "Hotel Sunroute Plaza Shinjuku",
-      "activities": "Partenza di buon'ora da Shinjuku per Hakone. Utilizziamo I'\"Hakone Free Pass\" per i trasporti. Seguiamo il classico \"Hakone Loop\": ammiriamo il lago Ashi in battello, saliamo\nsulla funivia Owakudani per vedere le sorgenti sulfuree e, con un po' di fortuna, godere di una vista spettacolare sul Monte Fuji. Non ci perdiamo il Santuario di Hakone. Rientro Tokyo in serata.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184409.png",
-      "location_coords": {
-        "lat": 35.2323662,
-        "lng": 139.1068849
-      },
-      "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
-      }
-    },
-    {
-      "date": "2025-11-21",
-      "location": "Tokyo",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "Hotel Sunroute Plaza Shinjuku",
-      "activities": "Per l'ultimo giorno a Tokyo, visitiamo il Museo Ghibli (biglietti da acquistare online con largo anticipo) o esploriamo l'isola artificiale di Odaiba, raggiungibile con la monorotaia Yurikamome. Qui troveremo architetture futuristiche, il museo digitale teamLab Borderless (da prenotare) e una replica della Statua della Libertà, per un'esperienza diversa dal solito.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184514.png",
-      "location_coords": {
-        "lat": 35.6768601,
-        "lng": 139.7638947
-      },
-      "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
-      }
-    },
-    {
-      "date": "2025-11-22",
-      "location": "Kyoto",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "Nishiyama Ryokan",
-      "activities": "Mattinata dedicata al trasferimento a Kyoto con il treno Shinkansen (circa 2 ore e mezza). Raggiungiamo il Nishiyama Ryokan per un'autentica esperienza giapponese. Nel pomeriggio, esploriamo il Nishiki Market, \"la cucina di Kyoto\". Per la serata, ci immergiamo nell'atmosfera magica di Gion, l'antico quartiere delle geishe.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184636.png",
-      "location_coords": {
-        "lat": 35.0115754,
-        "lng": 135.7681441
-      },
-      "accommodation_coords": {
-        "lat": 35.0131307,
-        "lng": 135.7662572
-      }
-    },
-    {
-      "date": "2025-11-23",
-      "location": "Kyoto",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "HIYORI Stay Kyoto Kamogawa",
-      "activities": "Oggi ci trasferiamo all'HIYORI Stay Kyoto Kamogawa. Dedichiamo poi la giornata alla scoperta della parte orientale di Kyoto. Iniziamo dal Fushimi Inari Shrine con i suoi famosi portali rossi, poi visitiamo il Kiyomizu-dera per la sua vista panoramica. Passeggiamo per le storiche stradine di Higashiyama, Sannenzaka e Ninnenzaka, e concludiamo con una visita al Santuario Yasaka.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184550.png",
-      "location_coords": {
-        "lat": 35.0115754,
-        "lng": 135.7681441
-      },
-      "accommodation_coords": {
-        "lat": 34.99266887,
-        "lng": 135.7681232
-      }
-    },
-    {
-      "date": "2025-11-24",
-      "location": "Osaka",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "HIYORI Stay Kyoto Kamogawa",
-      "activities": "Giornata nella vivace Osaka, raggiungibile in 30 minuti di treno JR da Kyoto. Visitiamo l'imponente Castello di Osaka, poi esploriamo il quartiere di Shinsaibashi per lo shopping. La serata è a Dotonbori, il cuore pulsante della città, con le sue insegne al neon e l'incredibile street food. Assaggiamo takoyaki e okonomiyaki prima di rientrare a Kyoto.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184727.png",
-      "location_coords": {
-        "lat": 34.6937569,
-        "lng": 135.5014539
-      },
-      "accommodation_coords": {
-        "lat": 34.99266887,
-        "lng": 135.7681232
-      }
-    },
-    {
-      "date": "2025-11-25",
-      "location": "Nara",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "HIYORI Stay Kyoto Kamogawa",
-      "activities": "Oggi andiamo a Nara, raggiungibile in 45 minuti di treno JR da Kyoto. L'attrazione principale è il Parco di Nara, dove i cervi girano liberamente. All'interno del parco, visitiamo il Tempio Todai-ji con la sua enorme statua del Buddha e il Santuario Kasuga Taisha, famoso per le migliaia di lanterne. Una gita facile e rilassante, con rientro a Kyoto in serata.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184808.png",
-      "location_coords": {
-        "lat": 34.2963089,
-        "lng": 135.8816819
-      },
-      "accommodation_coords": {
-        "lat": 34.99266887,
-        "lng": 135.7681232
-      }
-    },
-    {
-      "date": "2025-11-26",
-      "location": "Himeji",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "HIYORI Stay Kyoto Kamogawa",
-      "activities": "L'escursione di oggi ci porta al castello più bello del Giappone. Prendiamo uno Shinkansen da Kyoto per Himeji (circa 1 ora). Visitiamo il Castello di Himeji, noto come \"I'Airone Bianco\", una magnifica struttura originale del periodo feudale. Successivamente, esploriamo il vicino\ngiardino Koko-en prima di rientrare a Kyoto nel tardo pomeriggio.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184838.png",
-      "location_coords": {
-        "lat": 34.8153529,
-        "lng": 134.6854793
-      },
-      "accommodation_coords": {
-        "lat": 34.99266887,
-        "lng": 135.7681232
-      }
-    },
-    {
-      "date": "2025-11-27",
-      "location": "Kyoto",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "HIYORI Stay Kyoto Kamogawa",
-      "activities": "Dedichiamo l'ultimo giorno a Kyoto alla parte nordoccidentale. Iniziamo dalla suggestiva foresta di bambù di Arashiyama e visitiamo il vicino Tempio Tenryu-ji. Nel pomeriggio, ammiriamo il Kinkaku-ji, il famoso Padiglione d'Oro. Se avanza tempo, una visita al Tempio Ryoan-ji, con il suo enigmatico giardino di rocce, completerà la giornata.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184918.png",
-      "location_coords": {
-        "lat": 35.0115754,
-        "lng": 135.7681441
-      },
-      "accommodation_coords": {
-        "lat": 34.99266887,
-        "lng": 135.7681232
-      }
-    },
-    {
-      "date": "2025-11-28",
-      "location": "Hiroshima",
-      "isFlight": false,
-      "isCruise": false,
-      "accommodation": "HIYORI Stay Kyoto Kamogawa",
-      "activities": "Escursione intensa ma imperdibile. Partiamo molto presto da Kyoto con lo Shinkansen per Hiroshima (1h 40m). Dedichiamo la mattinata al Parco e al Museo della Pace. Dopo pranzo, treno e traghetto per l'isola di Miyajima per ammirare il famoso torii \"galleggiante\" del Santuario di Itsukushima. Possiamo anche salire sul Monte Misen per una vista spettacolare. Rientro a Kyoto in tarda serata.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20185004.png",
-      "location_coords": {
-        "lat": 34.3917241,
-        "lng": 132.4517589
-      },
-      "accommodation_coords": {
-        "lat": 34.99266887,
-        "lng": 135.7681232
-      }
-    },
-    {
-      "date": "2025-11-29",
-      "location": "Volo per l'Italia",
-      "isFlight": true,
-      "isCruise": false,
-      "accommodation": "Volo per l'Italia",
-      "activities": "È il nostro ultimo giorno in Giappone. Dopo il check-out, lasceremo i bagagli in hotel o negli armadietti della stazione di Kyoto per goderci la giornata. La mattinata sarà dedicata allo shopping dell'ultimo minuto nel gigantesco complesso della stazione, esplorando negozi come Isetan e The Cube, o in alternativa, facendo un'ultima visita culturale al vicino Tempio To-ji. Dopo un pranzo rilassato, avremo ancora tempo per qualche acquisto. Intorno alle 18:30, recupereremo i bagagli e prenderemo il treno Haruka Express per l'aeroporto del Kansai (KIX), per arrivare in tempo per il nostro volo delle 22:50.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20185142.png",
-      "location_coords": null
-    },
-    {
-      "date": "2025-11-30",
-      "location": "Bologna",
-      "isFlight": true,
-      "isCruise": false,
-      "accommodation": "Casa",
-      "activities": "L'arrivo a Bologna è previsto per le 9:55.",
-      "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/casa.png",
-      "location_coords": {
-        "lat": 44.49421141,
-        "lng": 11.34341832
+        "lat": 44.494586,
+        "lng": 11.342505
       }
     }
   ],
@@ -306,28 +458,55 @@
     "total": 7000,
     "expenses": [
       {
-        "id": 1755869919255,
-        "description": "Volo andata Bologna Tokyo ritorno Osaka Bologna (2 persone)",
-        "amount": 2230,
+        "id": 1755855993616,
+        "description": "Volo da Cebu City a Busuanga (2 persone)",
+        "amount": 109.5,
+        "category": "flights",
+        "person": "Leonardo",
+        "status": "paid",
+        "onSplid": true
+      },
+      {
+        "id": 1755857724273,
+        "description": "Volo andata Bologna Hong kong (2 persone)",
+        "amount": 1340,
+        "category": "flights",
+        "person": "Leonardo",
+        "status": "paid",
+        "onSplid": true
+      },
+      {
+        "id": 1755857777194,
+        "description": "Volo da El Nido a Manila (2 persone)",
+        "amount": 233.22,
         "category": "flights",
         "person": "Margherita",
         "status": "paid",
         "onSplid": true
       },
       {
-        "id": 1755870266762,
-        "description": "Hotel a Tokyo",
-        "amount": 1224,
+        "id": 1755858270299,
+        "description": "Volo da Manila a Bologna (2 persone)",
+        "amount": 1125,
+        "category": "flights",
+        "person": "Leonardo",
+        "status": "paid",
+        "onSplid": true
+      },
+      {
+        "id": 1755861414138,
+        "description": "Hotel Hong Kong",
+        "amount": 405,
         "category": "hotels",
         "person": "Margherita",
         "status": "booked",
         "onSplid": false,
-        "nights": 7
+        "nights": 3
       },
       {
-        "id": 1755870303651,
-        "description": "Ryokan a Kyoto",
-        "amount": 394,
+        "id": 1755861458971,
+        "description": "Hotel Cebu City",
+        "amount": 59,
         "category": "hotels",
         "person": "Margherita",
         "status": "booked",
@@ -335,92 +514,56 @@
         "nights": 1
       },
       {
-        "id": 1755870338956,
-        "description": "Hotel a Kyoto",
-        "amount": 1096,
+        "id": 1755861554886,
+        "description": "Hotel (provvisorio) Bantayan",
+        "amount": 611,
         "category": "hotels",
         "person": "Margherita",
         "status": "booked",
         "onSplid": false,
         "nights": 6
+      },
+      {
+        "id": 1755861643065,
+        "description": "Hotel Coron Island",
+        "amount": 561,
+        "category": "hotels",
+        "person": "Margherita",
+        "status": "booked",
+        "onSplid": false,
+        "nights": 4
+      },
+      {
+        "id": 1755861673514,
+        "description": "Hotel El Nido",
+        "amount": 1037,
+        "category": "hotels",
+        "person": "Margherita",
+        "status": "booked",
+        "onSplid": false,
+        "nights": 5
+      },
+      {
+        "id": 1755868803339,
+        "description": "Volo da Hong Kong a Cebu City (2 persone)",
+        "amount": 245,
+        "category": "flights",
+        "person": "Margherita",
+        "status": "paid",
+        "onSplid": true
       }
     ]
   },
-  "usefulLinks": [
-    {
-      "id": 1755870422159,
-      "title": "Japan Guide - Guida Completa",
-      "url": "https://www.japan-guide.com/"
-    },
-    {
-      "id": 1755870439896,
-      "title": "Ente Nazionale del Turismo Giapponese (JNTO)",
-      "url": "https://www.japan.travel/it/it/"
-    },
-    {
-      "id": 1755870471329,
-      "title": "Tokyo Metro (Mappa e Biglietti)",
-      "url": "https://www.tokyometro.jp/en/index.html"
-    },
-    {
-      "id": 1755870478585,
-      "title": "Biglietti Tokyo Skytree",
-      "url": "https://www.tokyo-skytree.jp/en/ticket/"
-    },
-    {
-      "id": 1755870498866,
-      "title": "Biglietti Museo Ghibli (Richiede prenotazione)",
-      "url": "https://www.ghibli-museum.jp/en/tickets/"
-    },
-    {
-      "id": 1755870513194,
-      "title": "Biglietti teamLab Borderless",
-      "url": "https://www.teamlab.art/e/borderless-tokyo/"
-    },
-    {
-      "id": 1755870538803,
-      "title": "Trasporti a Kyoto (Bus & Metro)",
-      "url": "https://www.city.kyoto.lg.jp/kotsu/page/0000028378.html"
-    },
-    {
-      "id": 1755870547123,
-      "title": "Osaka Amazing Pass",
-      "url": "https://www.osp.osaka-info.jp/en/"
-    },
-    {
-      "id": 1755870561764,
-      "title": "Accesso a Nara (Kintetsu Railway)",
-      "url": "https://www.kintetsu.co.jp/foreign/english/sightseeing/nara.html"
-    },
-    {
-      "id": 1755870577548,
-      "title": "Castello di Himeji (Sito Ufficiale)",
-      "url": "https://www.city.himeji.lg.jp/castle/index.html"
-    },
-    {
-      "id": 1755870591060,
-      "title": "Museo della Pace di Hiroshima",
-      "url": "https://hpmmuseum.jp/modules/info/index.php?action=PageView&page_id=51"
-    },
-    {
-      "id": 1755870605373,
-      "title": "Traghetto per Miyajima (JR Ferry)",
-      "url": "https://www.jr-miyajimaferry.co.jp/en/"
-    },
-    {
-      "id": 1755870620958,
-      "title": "Informazioni Suica & Pasmo (IC Cards)",
-      "url": "https://www.japan-guide.com/e/e2359_003.html"
-    },
-    {
-      "id": 1755870637166,
-      "title": "Nikko Pass (Tobu Railway)",
-      "url": "https://www.tobu.co.jp/en/ticket/nikko/"
-    },
-    {
-      "id": 1755870651846,
-      "title": "Hakone Free Pass (Odakyu Railway)",
-      "url": "https://www.odakyu.jp/english/passes/hakone/"
-    }
+  "usefulLinks": [],
+  "route": [
+    "Bologna ",
+    "Hong Kong",
+    "Cebu City",
+    "Bantayan",
+    "Coron Island",
+    "In Crociera",
+    "El Nido",
+    "Manila",
+    "Bologna"
   ]
 }
