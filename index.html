@@ -365,7 +365,7 @@
         // --- GLOBAL VARIABLES ---
         let isAdminMode = false;
         let currentData = null;
-        const DATA_STORAGE_KEY = 'travelPlannerData_Giappone1';
+        const DATA_STORAGE_KEY = 'travelPlannerData_Giappone2';
 
         // --- DEFAULT DATA (FALLBACK ONLY) ---
         const defaultFullData = {
@@ -457,27 +457,28 @@
 
         async function loadData() {
             try {
-                const savedData = localStorage.getItem(DATA_STORAGE_KEY);
-                if (savedData) {
-                    console.log("Dati caricati da localStorage.");
-                    return JSON.parse(savedData);
-                }
-
+                // MODIFICA: Tenta sempre di scaricare la versione più recente dal server.
                 console.log("Caricamento dati da itinerary.json...");
-                // Fetch the external JSON file, adding a cache-busting parameter
                 const response = await fetch(`itinerary.json?v=${new Date().getTime()}`);
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const jsonData = await response.json();
                 console.log("Dati caricati con successo da itinerary.json.");
-                // Save the fetched data to localStorage for future sessions
+                // Salva i dati scaricati nel localStorage per l'uso offline.
                 localStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(jsonData));
                 return jsonData;
 
             } catch (e) {
-                console.error("Errore nel caricamento dei dati, utilizzo i dati di default:", e);
-                // Don't clear localStorage here, it might have valid old data
+                console.error("Errore nel caricamento dei dati dal server:", e);
+                // FALLBACK: Se il download fallisce, prova a usare i dati salvati localmente.
+                const savedData = localStorage.getItem(DATA_STORAGE_KEY);
+                if (savedData) {
+                    console.log("Caricamento dal server fallito, utilizzo i dati da localStorage come fallback.");
+                    return JSON.parse(savedData);
+                }
+                // FALLBACK FINALE: Se non c'è nulla, usa i dati di default.
+                console.log("Nessun dato locale disponibile, utilizzo i dati di default.");
                 return JSON.parse(JSON.stringify(defaultFullData));
             }
         }
@@ -490,8 +491,8 @@
                 flights: [],
                 itinerary: [],
                 tours: [],
-                budget: currentData.budget, // Budget is managed directly in currentData
-                usefulLinks: currentData.usefulLinks // Links are managed directly
+                budget: currentData.budget, // Il budget viene gestito direttamente in currentData
+                usefulLinks: currentData.usefulLinks // I link sono gestiti direttamente
             };
 
             data.main.title = document.getElementById('main-title-input')?.value || currentData.main.title;
@@ -548,9 +549,9 @@
             }
         }
         
-        // --- NEW JSON EXPORT/IMPORT FUNCTIONS ---
+        // --- NUOVE FUNZIONI DI ESPORTAZIONE/IMPORTAZIONE JSON ---
         function exportJSON() {
-            saveData(); // Ensure we have the latest data from the DOM
+            saveData(); // Assicurati di avere i dati più recenti dal DOM
             const dataStr = JSON.stringify(currentData, null, 2);
             const blob = new Blob([dataStr], {type: "application/json"});
             const url = URL.createObjectURL(blob);
@@ -571,7 +572,7 @@
             reader.onload = function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
-                    // Basic validation
+                    // Validazione di base
                     if (importedData && importedData.main && importedData.itinerary && importedData.budget) {
                         if (confirm("Importando questo file, tutti i dati attuali non salvati verranno sovrascritti. Continuare?")) {
                             currentData = importedData;
@@ -588,25 +589,25 @@
                 }
             };
             reader.readAsText(file);
-            // Reset the input value to allow importing the same file again
+            // Resetta il valore dell'input per consentire di importare di nuovo lo stesso file
             event.target.value = '';
         }
 
 
-        // --- HTML EXPORT FUNCTION ---
+        // --- FUNZIONE DI ESPORTAZIONE HTML ---
         async function exportHTML() {
             alert("Questa funzione ora esporta una versione 'pubblica' del sito. Per salvare i dati, usa 'Esporta Dati (JSON)'.");
             saveData(); 
-            const latestData = await loadData(); // Await the data
+            const latestData = await loadData(); // Attendi i dati
             let htmlString = document.documentElement.outerHTML;
 
-            // This creates a self-contained HTML file with data embedded.
-            // IMPORTANT: Escape the closing script tag to prevent premature script termination.
+            // Questo crea un file HTML autonomo con i dati incorporati.
+            // IMPORTANTE: Esegui l'escape del tag di chiusura dello script per evitare la terminazione prematura dello script.
             const dataScript = `<script>const embeddedData = ${JSON.stringify(latestData, null, 2)};<\/script>`;
             htmlString = htmlString.replace('</head>', `${dataScript}</head>`);
             
-            // Modify the loadData function in the exported file to use the embedded data.
-            // This regex is more robust as it finds the whole function definition.
+            // Modifica la funzione loadData nel file esportato per utilizzare i dati incorporati.
+            // Questa regex è più robusta in quanto trova l'intera definizione della funzione.
             const loadDataRegex = /async function loadData\(\) {[\s\S]*?}/;
             const newLoadDataFunc = `async function loadData() { 
                     console.log("Dati caricati dalla variabile embedded.");
@@ -616,7 +617,7 @@
             if (htmlString.match(loadDataRegex)) {
                  htmlString = htmlString.replace(loadDataRegex, newLoadDataFunc);
             } else {
-                console.error("Could not find loadData function to replace in exported HTML.");
+                console.error("Impossibile trovare la funzione loadData da sostituire nell'HTML esportato.");
             }
 
             htmlString = htmlString.replace(/<body class="[^"]*">/, '<body class="content-hidden">');
@@ -634,7 +635,7 @@
             URL.revokeObjectURL(a.href);
         }
 
-        // --- PDF EXPORT FUNCTION ---
+        // --- FUNZIONE DI ESPORTAZIONE PDF ---
         async function saveAsPDF(quality = PDF_QUALITY_PRESETS.medium) {
             const pdfBtn = document.getElementById('pdf-btn');
             pdfBtn.textContent = `Generazione PDF (${quality.text})...`;
@@ -748,7 +749,7 @@
             }
         }
         
-        // --- RENDER FUNCTIONS ---
+        // --- FUNZIONI DI RENDER ---
         function renderApp(data, adminMode) {
             isAdminMode = adminMode;
             document.body.classList.toggle('admin-mode', adminMode);
@@ -919,7 +920,7 @@
             const container = document.getElementById('budget-content');
             if (!budgetData) { container.innerHTML = '<p>Dati budget non disponibili.</p>'; return; }
 
-            // 1. CALCULATIONS
+            // 1. CALCOLI
             const totalBudget = parseFloat(budgetData.total) || 0;
             const totalPaid = budgetData.expenses
                 .filter(e => e.status === 'paid')
@@ -933,7 +934,7 @@
             const paidPercentage = totalBudget > 0 ? (totalPaid / totalBudget) * 100 : 0;
             const bookedPercentage = totalBudget > 0 ? (totalBooked / totalBudget) * 100 : 0;
 
-            // 2. ADMIN FORM HTML
+            // 2. HTML MODULO ADMIN
             const categoryOptions = Object.entries(BUDGET_CATEGORIES).map(([key, value]) => `<option value="${key}">${value}</option>`).join('');
             const adminForm = `
                 <div class="card bg-slate-50 border-indigo-300 admin-only-grid">
@@ -950,7 +951,7 @@
                     </form>
                 </div>`;
 
-            // 3. CATEGORY CARDS HTML
+            // 3. HTML CARD CATEGORIE
             const expensesByCategory = budgetData.expenses.reduce((acc, expense) => {
                 (acc[expense.category] = acc[expense.category] || []).push(expense);
                 return acc;
@@ -1012,7 +1013,7 @@
                     </div>`;
             }).join('');
 
-            // 4. SUMMARY BY PERSON HTML
+            // 4. HTML RIEPILOGO PER PERSONA
             const summaryByPerson = budgetData.expenses.reduce((acc, { person, category, amount }) => {
                 if (!person) return acc;
                 acc[person] = acc[person] || { total: 0, categories: {} };
@@ -1042,7 +1043,7 @@
                     `).join('')}
                 </div>` : '';
 
-            // 5. FINAL ASSEMBLY
+            // 5. ASSEMBLAGGIO FINALE
             container.innerHTML = `
                 <div class="card bg-white border-slate-300">
                     <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
@@ -1091,7 +1092,7 @@
                 </div>`;
         }
 
-        // --- EVENT LISTENERS & HANDLERS ---
+        // --- GESTORI DI EVENTI E HANDLER ---
         async function handleImageUpload(event) {
             const input = event.target;
             const idPrefix = input.id.replace('-image-input', '');
@@ -1176,7 +1177,7 @@
             document.getElementById('export-html-btn').addEventListener('click', exportHTML);
             document.getElementById('apply-dates-btn').addEventListener('click', handleDateUpdate);
             
-            // New Listeners for JSON buttons
+            // Nuovi listener per i pulsanti JSON
             document.getElementById('export-json-btn').addEventListener('click', exportJSON);
             document.getElementById('import-json-btn').addEventListener('click', () => document.getElementById('import-json-input').click());
             document.getElementById('import-json-input').addEventListener('change', handleJSONImport);
@@ -1333,7 +1334,7 @@
             if (deleteTourBtn) removeTour(parseInt(deleteTourBtn.dataset.tourId));
         }
         
-        // --- INITIALIZATION & STARTUP LOGIC ---
+        // --- LOGICA DI INIZIALIZZAZIONE E AVVIO ---
         function handleSiteLogin(event) {
             event.preventDefault();
             const passwordInput = document.getElementById('site-access-password-input');
@@ -1368,7 +1369,7 @@
         
         async function initializeApp() {
             isAdminMode = sessionStorage.getItem('isAdmin') === 'true';
-            currentData = await loadData(); // Await the async load
+            currentData = await loadData(); // Attendi il caricamento asincrono
             if(!currentData.usefulLinks) currentData.usefulLinks = [];
             if(!currentData.tours) currentData.tours = [];
             renderApp(currentData, isAdminMode);
