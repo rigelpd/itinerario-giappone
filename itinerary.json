@@ -187,7 +187,10 @@
         "lat": 35.0115754,
         "lng": 135.7681441
       },
-      "accommodation_coords": null
+      "accommodation_coords": {
+        "lat": 34.99266887,
+        "lng": 135.7681232
+      }
     },
     {
       "date": "2025-11-24",
@@ -201,7 +204,10 @@
         "lat": 34.6937569,
         "lng": 135.5014539
       },
-      "accommodation_coords": null
+      "accommodation_coords": {
+        "lat": 34.99266887,
+        "lng": 135.7681232
+      }
     },
     {
       "date": "2025-11-25",
@@ -215,7 +221,10 @@
         "lat": 34.2963089,
         "lng": 135.8816819
       },
-      "accommodation_coords": null
+      "accommodation_coords": {
+        "lat": 34.99266887,
+        "lng": 135.7681232
+      }
     },
     {
       "date": "2025-11-26",
@@ -229,7 +238,10 @@
         "lat": 34.8153529,
         "lng": 134.6854793
       },
-      "accommodation_coords": null
+      "accommodation_coords": {
+        "lat": 34.99266887,
+        "lng": 135.7681232
+      }
     },
     {
       "date": "2025-11-27",
@@ -243,7 +255,10 @@
         "lat": 35.0115754,
         "lng": 135.7681441
       },
-      "accommodation_coords": null
+      "accommodation_coords": {
+        "lat": 34.99266887,
+        "lng": 135.7681232
+      }
     },
     {
       "date": "2025-11-28",
@@ -257,7 +272,10 @@
         "lat": 34.3917241,
         "lng": 132.4517589
       },
-      "accommodation_coords": null
+      "accommodation_coords": {
+        "lat": 34.99266887,
+        "lng": 135.7681232
+      }
     },
     {
       "date": "2025-11-29",
@@ -278,8 +296,8 @@
       "activities": "L'arrivo a Bologna è previsto per le 9:55.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/casa.png",
       "location_coords": {
-        "lat": 35.7044397,
-        "lng": 139.7424584
+        "lat": 44.49421141,
+        "lng": 11.34341832
       }
     }
   ],
