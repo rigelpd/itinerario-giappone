@@ -142,6 +142,32 @@
         </div>
     </div>
 
+    <!-- Route Definition Modal -->
+    <div id="route-modal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center z-50 no-print hidden">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-full max-w-lg mx-4 flex flex-col" style="max-height: 90vh;">
+            <h2 class="text-2xl font-bold mb-4">Definisci Percorso Mappa</h2>
+            <p class="text-gray-600 mb-6">Aggiungi le località in ordine per creare il tracciato sulla mappa.</p>
+            
+            <div id="route-list" class="bg-slate-100 p-4 rounded-lg mb-4 overflow-y-auto flex-grow">
+                <!-- Le tappe verranno inserite qui dinamicamente -->
+            </div>
+
+            <form id="add-route-stop-form" class="flex items-end gap-4">
+                <div class="flex-grow">
+                    <label for="route-location-select">Seleziona Tappa</label>
+                    <select id="route-location-select"></select>
+                </div>
+                <button type="submit" class="px-5 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition-colors h-10">Aggiungi</button>
+            </form>
+
+            <div class="flex justify-end gap-4 mt-8">
+                <button type="button" id="route-cancel-btn" class="px-6 py-2 bg-gray-200 text-gray-800 font-semibold rounded-lg hover:bg-gray-300 transition-colors">Annulla</button>
+                <button type="button" id="route-save-btn" class="px-6 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors">Salva Percorso</button>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Main App Container -->
     <div id="main-app-container" class="container mx-auto p-4 sm:p-6 lg:p-8">
         <header class="text-center mb-10 relative">
@@ -178,6 +204,7 @@
             <button id="export-json-btn" class="admin-only px-6 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors">Esporta Dati (JSON)</button>
             <button id="import-json-btn" class="admin-only px-6 py-2 bg-amber-500 text-white font-semibold rounded-lg shadow-md hover:bg-amber-600 transition-colors">Importa Dati (JSON)</button>
             <input type="file" id="import-json-input" class="hidden" accept="application/json">
+            <button id="define-route-btn" class="admin-only px-6 py-2 bg-teal-600 text-white font-semibold rounded-lg shadow-md hover:bg-teal-700 transition-colors">Definisci Percorso</button>
             <button id="export-html-btn" class="admin-only px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition-colors">Esporta HTML Pubblico</button>
             <button id="reset-btn" class="admin-only px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition-colors">Reset Itinerario</button>
         </div>
@@ -236,7 +263,7 @@
 
     <script>
         // --- CONFIGURATION ---
-        const SITE_ACCESS_PASSWORD = 'Giappone2025';
+        const SITE_ACCESS_PASSWORD = 'Filippine2026';
         const ADMIN_PASSWORD = 'Kerrickleo';
         const PDF_QUALITY_PRESETS = {
             low:    { scale: 1.5, jpegQuality: 0.6, text: 'Bassa' },
@@ -280,8 +307,9 @@
         // --- GLOBAL VARIABLES ---
         let isAdminMode = false;
         let currentData = null;
-        const DATA_STORAGE_KEY = 'travelPlannerData_Giappone4';
+        const DATA_STORAGE_KEY = 'travelPlannerData_Filippine2';
         let map = null; 
+        let tempRoute = [];
 
         // --- DEFAULT DATA (FALLBACK ONLY) ---
         const defaultFullData = {
@@ -290,7 +318,8 @@
             itinerary: [],
             tours: [],
             budget: { total: 0, expenses: [] },
-            usefulLinks: []
+            usefulLinks: [],
+            route: []
         };
 
         // --- GITHUB MODAL STATE ---
@@ -393,8 +422,11 @@
                 accommodationLayer.addLayer(marker);
             });
             
-            const routePoints = itineraryData
-                .map(item => item.location_coords)
+            const routePoints = (currentData.route || [])
+                .map(routeName => {
+                    const locationData = itineraryData.find(item => item.location === routeName);
+                    return locationData ? locationData.location_coords : null;
+                })
                 .filter(coords => coords && coords.lat && coords.lng);
             
             if (routePoints.length > 1) {
@@ -409,8 +441,8 @@
             };
 
             L.control.layers(baseMaps, overlayMaps).addTo(map);
-            locationsLayer.addTo(map); // Visibile di default
-            pathLayer.addTo(map); // Visibile di default
+            locationsLayer.addTo(map);
+            pathLayer.addTo(map);
 
             const isInItaly = (lat, lng) => lat > 36 && lat < 47 && lng > 6 && lng < 19;
             const markersForBounds = locationMarkers.filter(marker => !isInItaly(marker.getLatLng().lat, marker.getLatLng().lng));
@@ -511,6 +543,7 @@
                 }
                 const jsonData = await response.json();
                 console.log("Dati caricati con successo da itinerary.json.");
+                if (!jsonData.route) jsonData.route = []; // Initialize route if not present
                 localStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(jsonData));
                 return jsonData;
 
@@ -519,7 +552,9 @@
                 const savedData = localStorage.getItem(DATA_STORAGE_KEY);
                 if (savedData) {
                     console.log("Caricamento dal server fallito, utilizzo i dati da localStorage come fallback.");
-                    return JSON.parse(savedData);
+                    const parsedData = JSON.parse(savedData);
+                    if (!parsedData.route) parsedData.route = [];
+                    return parsedData;
                 }
                 console.log("Nessun dato locale disponibile, utilizzo i dati di default.");
                 return JSON.parse(JSON.stringify(defaultFullData));
@@ -535,7 +570,8 @@
                 itinerary: [],
                 tours: [],
                 budget: currentData.budget,
-                usefulLinks: currentData.usefulLinks
+                usefulLinks: currentData.usefulLinks,
+                route: currentData.route || []
             };
 
             data.main.title = document.getElementById('main-title-input')?.value || currentData.main.title;
@@ -1006,6 +1042,35 @@
             container.innerHTML = `<div class="card bg-white border-slate-300"><h2 class="text-2xl font-bold text-gray-800 mb-6">Link Utili</h2>${adminMode ? `<div class="card bg-slate-50 border-indigo-300 mb-6 admin-only-grid"><h3 class="text-xl font-semibold text-gray-700 mb-4">Aggiungi Nuovo Link</h3><form id="add-link-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end"><div class="md:col-span-2"><label for="link-title">Titolo</label><input type="text" id="link-title" required></div><div class="md:col-span-2"><label for="link-url">URL</label><input type="url" id="link-url" required></div><div class="md:col-start-4"><button type="submit" class="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700">Aggiungi Link</button></div></form></div>` : ''}<ul id="useful-links-list">${linksList.length > 0 ? linksList : '<p class="text-gray-500">Nessun link aggiunto.</p>'}</ul></div>`;
         }
 
+        // --- Route Modal Logic ---
+        function openRouteModal() {
+            tempRoute = [...(currentData.route || [])];
+            const select = document.getElementById('route-location-select');
+            const uniqueLocations = [...new Set(currentData.itinerary.map(item => item.location).filter(Boolean))];
+            select.innerHTML = uniqueLocations.map(loc => `<option value="${loc}">${loc}</option>`).join('');
+            renderRouteListInModal();
+            document.getElementById('route-modal').classList.remove('hidden');
+        }
+
+        function renderRouteListInModal() {
+            const listContainer = document.getElementById('route-list');
+            if (tempRoute.length === 0) {
+                listContainer.innerHTML = '<p class="text-gray-500 text-center">Nessuna tappa definita.</p>';
+                return;
+            }
+            listContainer.innerHTML = tempRoute.map((stop, index) => `
+                <div class="flex items-center justify-between bg-white p-2 rounded-md mb-2 shadow-sm">
+                    <span class="font-medium">${index + 1}. ${stop}</span>
+                    <button class="remove-route-stop-btn text-red-500 hover:text-red-700" data-index="${index}">${TRASH_ICON_SVG}</button>
+                </div>
+            `).join('');
+        }
+
+        function closeRouteModal() {
+            document.getElementById('route-modal').classList.add('hidden');
+            tempRoute = [];
+        }
+
         // --- GESTORI DI EVENTI E HANDLER ---
         async function handleImageUpload(event) {
             const input = event.target;
@@ -1090,6 +1155,7 @@
             document.getElementById('pdf-btn').addEventListener('click', () => document.getElementById('pdf-quality-modal').classList.remove('hidden'));
             document.getElementById('export-html-btn').addEventListener('click', exportHTML);
             document.getElementById('apply-dates-btn').addEventListener('click', handleDateUpdate);
+            document.getElementById('define-route-btn').addEventListener('click', openRouteModal);
             
             document.getElementById('export-json-btn').addEventListener('click', exportJSON);
             document.getElementById('import-json-btn').addEventListener('click', () => document.getElementById('import-json-input').click());
@@ -1110,7 +1176,32 @@
                 document.getElementById('pdf-quality-modal').classList.add('hidden');
                 saveAsPDF(PDF_QUALITY_PRESETS[btn.dataset.quality]);
             }));
+
+            // Route Modal Listeners
+            document.getElementById('route-cancel-btn').addEventListener('click', closeRouteModal);
+            document.getElementById('route-save-btn').addEventListener('click', () => {
+                currentData.route = [...tempRoute];
+                saveData();
+                initializeMap(currentData.itinerary);
+                closeRouteModal();
+            });
+            document.getElementById('add-route-stop-form').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const selectedLocation = document.getElementById('route-location-select').value;
+                if (selectedLocation) {
+                    tempRoute.push(selectedLocation);
+                    renderRouteListInModal();
+                }
+            });
+            document.getElementById('route-list').addEventListener('click', (e) => {
+                if (e.target.closest('.remove-route-stop-btn')) {
+                    const index = parseInt(e.target.closest('.remove-route-stop-btn').dataset.index);
+                    tempRoute.splice(index, 1);
+                    renderRouteListInModal();
+                }
+            });
         }
+
         function setupDynamicEventListeners() {
             document.body.removeEventListener('input', handleDynamicInput);
             document.body.removeEventListener('change', handleDynamicChange);
@@ -1314,6 +1405,7 @@
             currentData = await loadData();
             if(!currentData.usefulLinks) currentData.usefulLinks = [];
             if(!currentData.tours) currentData.tours = [];
+            if(!currentData.route) currentData.route = [];
             renderApp(currentData, isAdminMode);
         }
 
