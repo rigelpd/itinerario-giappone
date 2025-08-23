@@ -31,7 +31,7 @@
       "location": "Bologna",
       "isFlight": true,
       "isCruise": false,
-      "accommodation": "CasaABC",
+      "accommodation": "Casa",
       "activities": "Partenza dall'aeroporto di Bologna alle 19:35. Arriveremo con almeno 3 ore di anticipo per check-in e controlli.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/casa.png"
     },
