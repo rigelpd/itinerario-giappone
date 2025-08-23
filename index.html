@@ -3,162 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Itinerario di Viaggio</title>
+    <title>Itinerario di Viaggio con Mappa</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" xintegrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" xintegrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoVBL5gI9kLmbG0C+nsFNRroMkMP8A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Libreria Leaflet.js per la mappa -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
     <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f1f5f9; /* slate-100 */
-        }
-        .content-hidden #main-app-container {
-            display: none;
-        }
-        .card {
-            border-radius: 0.75rem; /* rounded-xl */
-            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-md */
-            padding: 1.5rem; /* p-6 */
-            margin-bottom: 1.5rem; /* mb-6 */
-            transition: all 0.3s ease-in-out;
-            border-left-width: 4px;
-            background-color: white;
-            border-color: transparent;
-        }
-        .card:hover {
-            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); /* shadow-lg */
-            transform: translateY(-2px);
-        }
-        h1, h2, h3 {
-            font-weight: 700;
-        }
-        input, textarea, select {
-            width: 100%;
-            border-radius: 0.5rem; /* rounded-lg */
-            border: 1px solid #d1d5db; /* border-gray-300 */
-            padding: 0.5rem 0.75rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-            background-color: white;
-        }
-        textarea {
-            resize: none;
-            overflow: hidden;
-        }
-        input:focus, textarea:focus, select:focus {
-            outline: none;
-            border-color: #6366f1; /* indigo-500 */
-            box-shadow: 0 0 0 2px #c7d2fe; /* indigo-200 */
-        }
-        label {
-            display: block;
-            font-weight: 500;
-            margin-bottom: 0.25rem;
-            color: #4b5563; /* gray-600 */
-        }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Inter', sans-serif; background-color: #f1f5f9; }
+        .content-hidden #main-app-container { display: none; }
+        .card { border-radius: 0.75rem; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); padding: 1.5rem; margin-bottom: 1.5rem; transition: all 0.3s ease-in-out; border-left-width: 4px; background-color: white; border-color: transparent; }
+        .card:hover { box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1); transform: translateY(-2px); }
+        h1, h2, h3 { font-weight: 700; }
+        input, textarea, select { width: 100%; border-radius: 0.5rem; border: 1px solid #d1d5db; padding: 0.5rem 0.75rem; transition: border-color 0.2s, box-shadow 0.2s; background-color: white; }
+        textarea { resize: none; overflow: hidden; }
+        input:focus, textarea:focus, select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 2px #c7d2fe; }
+        label { display: block; font-weight: 500; margin-bottom: 0.25rem; color: #4b5563; }
         .day-card { border-color: #a5b4fc; }
         .flight-card { background-color: #e0e7ff; border-color: #818cf8; }
         .tour-card { background-color: #dcfce7; border-color: #4ade80; }
         .image-placeholder { min-height: 220px; }
-        .tab-button {
-            padding: 0.75rem 1.5rem;
-            border-radius: 0.5rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: 2px solid transparent;
-        }
-        .tab-button.active {
-            background-color: #4f46e5; /* indigo-600 */
-            color: white;
-        }
-        .tab-button:not(.active) {
-            background-color: white;
-            color: #4f46e5;
-            border-color: #e0e7ff;
-        }
-        button:disabled {
-            opacity: 0.7;
-            cursor: not-allowed;
-        }
+        .tab-button { padding: 0.75rem 1.5rem; border-radius: 0.5rem; font-weight: 600; cursor: pointer; transition: all 0.2s; border: 2px solid transparent; }
+        .tab-button.active { background-color: #4f46e5; color: white; }
+        .tab-button:not(.active) { background-color: white; color: #4f46e5; border-color: #e0e7ff; }
+        button:disabled { opacity: 0.7; cursor: not-allowed; }
         .admin-only, .admin-only-flex, .admin-only-grid { display: none !important; }
         body.admin-mode .admin-only { display: inline-block !important; }
         body.admin-mode .admin-only-flex { display: flex !important; }
         body.admin-mode .admin-only-grid { display: grid !important; }
         body.admin-mode .user-only { display: none !important; }
-        .readonly-text {
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            padding: 0.5rem 0.75rem;
+        .readonly-text { background-color: #f9fafb; border: 1px solid #e5e7eb; border-radius: 0.5rem; padding: 0.5rem 0.75rem; width: 100%; white-space: pre-wrap; word-break: break-word; color: #374151; min-height: 38px; }
+        .day-card-wrapper, .flight-card, .tour-card { page-break-inside: avoid; }
+        .calendar-day { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; height: 50px; padding-top: 4px; }
+        .calendar-day.trip-day { background-color: #dcfce7; color: #166534; font-weight: 600; cursor: pointer; border-radius: 0.5rem; transition: all 0.2s ease-in-out; }
+        .calendar-day.trip-day:hover { background-color: #bbf7d0; transform: scale(1.05); }
+        .calendar-day.today .day-number { box-shadow: 0 0 0 2px #6366f1; border-radius: 9999px; background-color: #e0e7ff; }
+        .day-number { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; }
+        .calendar-icons { font-size: 0.75rem; line-height: 1; margin-top: 2px; }
+        .progress-bar { background-color: #e5e7eb; border-radius: 9999px; height: 1.25rem; overflow: hidden; display: flex; }
+        .expense-item.on-splid { background-color: #f0f9ff; }
+        .expense-item.booked { border-left: 4px solid #f59e0b; }
+        .expense-item.paid { border-left: 4px solid #22c55e; }
+        /* Stile per il contenitore della mappa */
+        #map {
+            height: 450px;
             width: 100%;
-            white-space: pre-wrap;
-            word-break: break-word;
-            color: #374151;
-            min-height: 38px;
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1); /* shadow-md */
+            z-index: 1; /* Assicura che la mappa sia sotto i modali */
         }
-        .day-card-wrapper, .flight-card, .tour-card {
-             page-break-inside: avoid;
-        }
-        .calendar-day {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
-            height: 50px;
-            padding-top: 4px;
-        }
-        .calendar-day.trip-day {
-            background-color: #dcfce7; /* green-100 */
-            color: #166534; /* green-800 */
-            font-weight: 600;
-            cursor: pointer;
-            border-radius: 0.5rem;
-            transition: all 0.2s ease-in-out;
-        }
-        .calendar-day.trip-day:hover {
-            background-color: #bbf7d0; /* green-200 */
-            transform: scale(1.05);
-        }
-        .calendar-day.today .day-number {
-            box-shadow: 0 0 0 2px #6366f1; /* indigo-500 */
-            border-radius: 9999px;
-            background-color: #e0e7ff;
-        }
-        .day-number {
-            width: 24px;
-            height: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .calendar-icons {
-            font-size: 0.75rem;
-            line-height: 1;
-            margin-top: 2px;
-        }
-        .progress-bar {
-            background-color: #e5e7eb; /* gray-200 */
-            border-radius: 9999px;
-            height: 1.25rem;
-            overflow: hidden;
-            display: flex;
-        }
-        .expense-item.on-splid {
-            background-color: #f0f9ff; /* sky-50 */
-        }
-        .expense-item.booked {
-            border-left: 4px solid #f59e0b; /* amber-500 */
-        }
-        .expense-item.paid {
-            border-left: 4px solid #22c55e; /* green-500 */
-        }
-
         @media print {
             body { background-color: white; }
             .no-print, .no-print * { display: none !important; }
@@ -264,11 +164,9 @@
         <!-- Controls -->
         <div class="flex flex-wrap justify-center items-center gap-4 mb-8 no-print">
             <button id="pdf-btn" class="px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 transition-colors">Salva come PDF</button>
-            <!-- New JSON buttons -->
             <button id="export-json-btn" class="admin-only px-6 py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition-colors">Esporta Dati (JSON)</button>
             <button id="import-json-btn" class="admin-only px-6 py-2 bg-amber-500 text-white font-semibold rounded-lg shadow-md hover:bg-amber-600 transition-colors">Importa Dati (JSON)</button>
             <input type="file" id="import-json-input" class="hidden" accept="application/json">
-            <!-- End of New JSON buttons -->
             <button id="export-html-btn" class="admin-only px-6 py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition-colors">Esporta HTML Pubblico</button>
             <button id="reset-btn" class="admin-only px-6 py-2 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition-colors">Reset Itinerario</button>
         </div>
@@ -299,6 +197,12 @@
             <button id="tab-btn-tours" class="tab-button">Tour</button>
             <button id="tab-btn-budget" class="tab-button">Budget</button>
             <button id="tab-btn-links" class="tab-button">Link Utili</button>
+        </div>
+
+        <!-- NUOVO: Contenitore Mappa -->
+        <div id="map-container" class="mb-8 no-print">
+            <h2 class="text-2xl mb-4 border-b pb-2 border-gray-300 font-bold text-gray-700">Mappa Interattiva</h2>
+            <div id="map"></div>
         </div>
 
         <!-- Contenuto delle Schede -->
@@ -366,6 +270,8 @@
         let isAdminMode = false;
         let currentData = null;
         const DATA_STORAGE_KEY = 'travelPlannerData_Giappone2';
+        let map = null; // Variabile globale per la mappa
+        let markerGroup = null; // Gruppo di marker per la mappa
 
         // --- DEFAULT DATA (FALLBACK ONLY) ---
         const defaultFullData = {
@@ -380,6 +286,55 @@
         // --- GITHUB MODAL STATE ---
         let currentImageTargetId = null;
 
+        // --- FUNZIONI MAPPA ---
+        function initializeMap(itineraryData) {
+            if (map) {
+                map.remove();
+                map = null;
+            }
+            if (!document.getElementById('map')) return; // Non inizializzare se l'elemento non c'è
+
+            map = L.map('map').setView([36.2048, 138.2529], 5); // Centro del Giappone
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+            markerGroup = L.layerGroup().addTo(map);
+            const markers = [];
+
+            itineraryData.forEach((item, index) => {
+                if (item.location_coords && item.location_coords.lat && item.location_coords.lng) {
+                    const marker = L.marker([item.location_coords.lat, item.location_coords.lng])
+                        .bindPopup(`<b>Giorno ${index + 1}: ${item.location}</b>`);
+                    markerGroup.addLayer(marker);
+                    markers.push(marker);
+                }
+                if (item.accommodation_coords && item.accommodation_coords.lat && item.accommodation_coords.lng) {
+                    const accommodationMarker = L.marker([item.accommodation_coords.lat, item.accommodation_coords.lng], {
+                        icon: new L.Icon({
+                            iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                            iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+                        })
+                    }).bindPopup(`<b>Alloggio: ${item.accommodation}</b><br>(Giorno ${index + 1})`);
+                    markerGroup.addLayer(accommodationMarker);
+                    markers.push(accommodationMarker);
+                }
+            });
+
+            if (markers.length > 0) {
+                const groupBounds = L.featureGroup(markers).getBounds();
+                map.fitBounds(groupBounds.pad(0.1));
+            }
+        }
+
+        function centerMapOnLocation(lat, lng) {
+            if (map && lat && lng) {
+                map.flyTo([lat, lng], 14, { duration: 1 });
+            }
+        }
+
         // --- UTILITY & HELPER FUNCTIONS ---
         const formatCurrency = (value) => new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(value);
         function formatOffset(offset) { const sign = offset >= 0 ? '+' : '-'; const absOffset = Math.abs(offset); const hours = String(Math.floor(absOffset)).padStart(2, '0'); const minutes = String((absOffset % 1) * 60).padStart(2, '0'); return `${sign}${hours}:${minutes}`; }
@@ -388,16 +343,15 @@
             if (!depTimeValue || !arrTimeValue) return '';
             try {
                 let depDate, arrDate;
-                if (depTzOffset !== null && arrTzOffset !== null) { // Flight with timezone
+                if (depTzOffset !== null && arrTzOffset !== null) {
                     depDate = new Date(`${depTimeValue}:00${formatOffset(depTzOffset)}`);
                     arrDate = new Date(`${arrTimeValue}:00${formatOffset(arrTzOffset)}`);
-                } else { // Tour without timezone
+                } else {
                     depDate = new Date(depTimeValue);
                     arrDate = new Date(arrTimeValue);
                 }
                 let diff = arrDate.getTime() - depDate.getTime();
-                if (isNaN(diff)) return "Date non valide";
-                if (diff < 0) return "Arrivo prima della partenza";
+                if (isNaN(diff) || diff < 0) return "";
                 
                 const diffDays = Math.floor(diff / 86400000);
                 diff -= diffDays * 86400000;
@@ -410,7 +364,7 @@
                 durationString += `${diffHours}h ${diffMinutes}m`;
                 return durationString;
             } catch(e) {
-                return "Date non valide";
+                return "";
             }
         }
 
@@ -448,7 +402,7 @@
         function saveData() {
             try {
                 const dataToSave = buildDataObjectFromDOM();
-                currentData = dataToSave; // Update in-memory state
+                currentData = dataToSave;
                 localStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(dataToSave));
             } catch (e) {
                 console.error("Errore nel salvataggio dei dati:", e);
@@ -457,7 +411,6 @@
 
         async function loadData() {
             try {
-                // MODIFICA: Tenta sempre di scaricare la versione più recente dal server.
                 console.log("Caricamento dati da itinerary.json...");
                 const response = await fetch(`itinerary.json?v=${new Date().getTime()}`);
                 if (!response.ok) {
@@ -465,19 +418,16 @@
                 }
                 const jsonData = await response.json();
                 console.log("Dati caricati con successo da itinerary.json.");
-                // Salva i dati scaricati nel localStorage per l'uso offline.
                 localStorage.setItem(DATA_STORAGE_KEY, JSON.stringify(jsonData));
                 return jsonData;
 
             } catch (e) {
                 console.error("Errore nel caricamento dei dati dal server:", e);
-                // FALLBACK: Se il download fallisce, prova a usare i dati salvati localmente.
                 const savedData = localStorage.getItem(DATA_STORAGE_KEY);
                 if (savedData) {
                     console.log("Caricamento dal server fallito, utilizzo i dati da localStorage come fallback.");
                     return JSON.parse(savedData);
                 }
-                // FALLBACK FINALE: Se non c'è nulla, usa i dati di default.
                 console.log("Nessun dato locale disponibile, utilizzo i dati di default.");
                 return JSON.parse(JSON.stringify(defaultFullData));
             }
@@ -491,8 +441,8 @@
                 flights: [],
                 itinerary: [],
                 tours: [],
-                budget: currentData.budget, // Il budget viene gestito direttamente in currentData
-                usefulLinks: currentData.usefulLinks // I link sono gestiti direttamente
+                budget: currentData.budget,
+                usefulLinks: currentData.usefulLinks
             };
 
             data.main.title = document.getElementById('main-title-input')?.value || currentData.main.title;
@@ -514,6 +464,7 @@
 
             document.querySelectorAll('#itinerary-container .day-card-wrapper').forEach((card, index) => {
                 const dayId = `day${index + 1}`;
+                const originalItem = currentData.itinerary[index] || {};
                 data.itinerary.push({
                     date: document.getElementById(`${dayId}-date`).value,
                     location: document.getElementById(`${dayId}-location`).value,
@@ -522,6 +473,8 @@
                     accommodation: document.getElementById(`${dayId}-accommodation`).value,
                     activities: document.getElementById(`${dayId}-activities`).value,
                     image: document.getElementById(`${dayId}-image-preview`).src,
+                    location_coords: originalItem.location_coords, // Preserve coords
+                    accommodation_coords: originalItem.accommodation_coords // Preserve coords
                 });
             });
 
@@ -549,9 +502,8 @@
             }
         }
         
-        // --- NUOVE FUNZIONI DI ESPORTAZIONE/IMPORTAZIONE JSON ---
         function exportJSON() {
-            saveData(); // Assicurati di avere i dati più recenti dal DOM
+            saveData();
             const dataStr = JSON.stringify(currentData, null, 2);
             const blob = new Blob([dataStr], {type: "application/json"});
             const url = URL.createObjectURL(blob);
@@ -572,7 +524,6 @@
             reader.onload = function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
-                    // Validazione di base
                     if (importedData && importedData.main && importedData.itinerary && importedData.budget) {
                         if (confirm("Importando questo file, tutti i dati attuali non salvati verranno sovrascritti. Continuare?")) {
                             currentData = importedData;
@@ -589,25 +540,18 @@
                 }
             };
             reader.readAsText(file);
-            // Resetta il valore dell'input per consentire di importare di nuovo lo stesso file
             event.target.value = '';
         }
 
-
-        // --- FUNZIONE DI ESPORTAZIONE HTML ---
         async function exportHTML() {
             alert("Questa funzione ora esporta una versione 'pubblica' del sito. Per salvare i dati, usa 'Esporta Dati (JSON)'.");
             saveData(); 
-            const latestData = await loadData(); // Attendi i dati
+            const latestData = await loadData();
             let htmlString = document.documentElement.outerHTML;
 
-            // Questo crea un file HTML autonomo con i dati incorporati.
-            // IMPORTANTE: Esegui l'escape del tag di chiusura dello script per evitare la terminazione prematura dello script.
             const dataScript = `<script>const embeddedData = ${JSON.stringify(latestData, null, 2)};<\/script>`;
             htmlString = htmlString.replace('</head>', `${dataScript}</head>`);
             
-            // Modifica la funzione loadData nel file esportato per utilizzare i dati incorporati.
-            // Questa regex è più robusta in quanto trova l'intera definizione della funzione.
             const loadDataRegex = /async function loadData\(\) {[\s\S]*?}/;
             const newLoadDataFunc = `async function loadData() { 
                     console.log("Dati caricati dalla variabile embedded.");
@@ -635,7 +579,6 @@
             URL.revokeObjectURL(a.href);
         }
 
-        // --- FUNZIONE DI ESPORTAZIONE PDF ---
         async function saveAsPDF(quality = PDF_QUALITY_PRESETS.medium) {
             const pdfBtn = document.getElementById('pdf-btn');
             pdfBtn.textContent = `Generazione PDF (${quality.text})...`;
@@ -779,6 +722,7 @@
                 document.getElementById('end-date-input').value = data.itinerary[data.itinerary.length - 1].date;
             }
 
+            initializeMap(data.itinerary);
             setupDynamicEventListeners();
         }
         
@@ -850,15 +794,25 @@
         function createDetailedItinerary(data, adminMode) {
             const container = document.getElementById('itinerary-container');
             const mapIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /></svg>`;
+            const centerMapIconSvg = `<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C3.732 5.943 7.523 4 10 4s6.268 1.943 9.542 6c-3.274 4.057-7.064 6-9.542 6S3.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>`;
+            
             container.innerHTML = data.map((item, index) => {
                 const dayId = `day${index + 1}`;
                 const dateObj = new Date(item.date + 'T12:00:00Z');
                 const dateString = dateObj.toLocaleDateString('it-IT', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
                 const accommodationLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.accommodation)}`;
                 const hasImage = item.image && (item.image.startsWith('data:') || item.image.startsWith('http'));
+                
+                const centerMapButton = (item.location_coords && item.location_coords.lat) 
+                    ? `<button class="center-map-btn p-2 text-gray-400 hover:text-indigo-600" title="Mostra sulla mappa" data-lat="${item.location_coords.lat}" data-lng="${item.location_coords.lng}">${centerMapIconSvg}</button>`
+                    : '';
+
                 return `<div class="card day-card flex flex-col md:flex-row gap-6 items-stretch day-card-wrapper" data-date="${item.date}">
                         <div class="w-full md:w-1/2 flex flex-col">
-                            <h3 class="text-lg font-semibold text-gray-800 mb-4">${dateString} (Giorno ${index + 1})</h3>
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="text-lg font-semibold text-gray-800">${dateString} (Giorno ${index + 1})</h3>
+                                ${centerMapButton}
+                            </div>
                             <div class="grid grid-cols-1 gap-4 flex-grow">
                                 ${adminMode ? `<div><label for="${dayId}-date">Data</label><input type="date" id="${dayId}-date" value="${item.date}"></div><div><label for="${dayId}-location">Località</label><input type="text" id="${dayId}-location" value="${item.location}"></div><div><label for="${dayId}-accommodation">Alloggio</label><div class="relative flex items-center"><input type="text" id="${dayId}-accommodation" value="${item.accommodation}" class="pr-10"><a href="${accommodationLink}" target="_blank" class="gmaps-link absolute right-0 top-0 h-full flex items-center px-3 text-gray-400 hover:text-indigo-600" data-input-id="${dayId}-accommodation" title="Apri in Google Maps">${mapIconSvg}</a></div></div><div class="flex-grow flex flex-col"><label for="${dayId}-activities">Attività</label><textarea id="${dayId}-activities">${item.activities}</textarea></div><div class="flex items-center gap-6 mt-2"><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="${dayId}-flight-check" ${item.isFlight ? 'checked' : ''} class="w-5 h-5 rounded text-indigo-600 focus:ring-indigo-500"> <span>✈️ Volo</span></label><label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="${dayId}-cruise-check" ${item.isCruise ? 'checked' : ''} class="w-5 h-5 rounded text-sky-600 focus:ring-sky-500"> <span>🚢 Crociera</span></label></div>` : `<div><label>Località</label><div class="readonly-text">${item.location}</div></div><div><label>Alloggio</label><div class="flex items-center justify-between readonly-text"><span class="flex-grow">${item.accommodation}</span><a href="${accommodationLink}" target="_blank" title="Apri in Google Maps" class="p-2 text-gray-400 hover:text-indigo-600">${mapIconSvg}</a></div></div><div class="flex-grow flex flex-col"><label>Attività</label><div class="readonly-text">${item.activities.replace(/\n/g, '<br>')}</div></div>`}
                             </div>
@@ -920,49 +874,20 @@
             const container = document.getElementById('budget-content');
             if (!budgetData) { container.innerHTML = '<p>Dati budget non disponibili.</p>'; return; }
 
-            // 1. CALCOLI
             const totalBudget = parseFloat(budgetData.total) || 0;
-            const totalPaid = budgetData.expenses
-                .filter(e => e.status === 'paid')
-                .reduce((sum, expense) => sum + (parseFloat(expense.amount) || 0), 0);
-            const totalBooked = budgetData.expenses
-                .filter(e => e.status === 'booked')
-                .reduce((sum, expense) => sum + (parseFloat(expense.amount) || 0), 0);
+            const totalPaid = budgetData.expenses.filter(e => e.status === 'paid').reduce((sum, expense) => sum + (parseFloat(expense.amount) || 0), 0);
+            const totalBooked = budgetData.expenses.filter(e => e.status === 'booked').reduce((sum, expense) => sum + (parseFloat(expense.amount) || 0), 0);
             const totalSpent = totalPaid + totalBooked;
             const remaining = totalBudget - totalSpent;
-
             const paidPercentage = totalBudget > 0 ? (totalPaid / totalBudget) * 100 : 0;
             const bookedPercentage = totalBudget > 0 ? (totalBooked / totalBudget) * 100 : 0;
-
-            // 2. HTML MODULO ADMIN
             const categoryOptions = Object.entries(BUDGET_CATEGORIES).map(([key, value]) => `<option value="${key}">${value}</option>`).join('');
-            const adminForm = `
-                <div class="card bg-slate-50 border-indigo-300 admin-only-grid">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4 col-span-full">Aggiungi Nuova Spesa</h3>
-                    <form id="add-expense-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
-                        <div class="lg:col-span-2"><label for="expense-desc">Descrizione</label><input type="text" id="expense-desc" required></div>
-                        <div><label for="expense-amount">Importo (€)</label><input type="number" id="expense-amount" step="0.01" required></div>
-                        <div><label for="expense-category">Categoria</label><select id="expense-category">${categoryOptions}</select></div>
-                        <div id="expense-nights-container" class="hidden"><label for="expense-nights">Numero Notti</label><input type="number" id="expense-nights" min="1"></div>
-                        <div><label for="expense-person">Pagato da</label><input type="text" id="expense-person" required></div>
-                        <div><label for="expense-status">Stato</label><select id="expense-status"><option value="paid">Pagata</option><option value="booked">Prenotata</option></select></div>
-                        <div class="flex items-center"><label for="expense-splid" class="flex items-center gap-2 cursor-pointer pt-6"><input type="checkbox" id="expense-splid" class="w-5 h-5"><span>Su Splid?</span></label></div>
-                        <div class="lg:col-start-4"><button type="submit" class="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700">Aggiungi</button></div>
-                    </form>
-                </div>`;
-
-            // 3. HTML CARD CATEGORIE
-            const expensesByCategory = budgetData.expenses.reduce((acc, expense) => {
-                (acc[expense.category] = acc[expense.category] || []).push(expense);
-                return acc;
-            }, {});
-
+            const adminForm = `<div class="card bg-slate-50 border-indigo-300 admin-only-grid"><h3 class="text-xl font-semibold text-gray-700 mb-4 col-span-full">Aggiungi Nuova Spesa</h3><form id="add-expense-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 items-end"><div class="lg:col-span-2"><label for="expense-desc">Descrizione</label><input type="text" id="expense-desc" required></div><div><label for="expense-amount">Importo (€)</label><input type="number" id="expense-amount" step="0.01" required></div><div><label for="expense-category">Categoria</label><select id="expense-category">${categoryOptions}</select></div><div id="expense-nights-container" class="hidden"><label for="expense-nights">Numero Notti</label><input type="number" id="expense-nights" min="1"></div><div><label for="expense-person">Pagato da</label><input type="text" id="expense-person" required></div><div><label for="expense-status">Stato</label><select id="expense-status"><option value="paid">Pagata</option><option value="booked">Prenotata</option></select></div><div class="flex items-center"><label for="expense-splid" class="flex items-center gap-2 cursor-pointer pt-6"><input type="checkbox" id="expense-splid" class="w-5 h-5"><span>Su Splid?</span></label></div><div class="lg:col-start-4"><button type="submit" class="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700">Aggiungi</button></div></form></div>`;
+            const expensesByCategory = budgetData.expenses.reduce((acc, expense) => { (acc[expense.category] = acc[expense.category] || []).push(expense); return acc; }, {});
             const categoryCards = Object.keys(BUDGET_CATEGORIES).map(catKey => {
                 const expenses = expensesByCategory[catKey];
                 if (!expenses || expenses.length === 0) return '';
-                
                 const categoryTotal = expenses.reduce((sum, exp) => sum + (parseFloat(exp.amount) || 0), 0);
-                
                 let categoryHeaderInfo = '';
                 if (catKey === 'hotels') {
                     const totalNights = expenses.reduce((sum, exp) => sum + (exp.nights || 0), 0);
@@ -971,125 +896,21 @@
                         categoryHeaderInfo = `<p class="text-sm text-gray-500 mb-4">Totale ${totalNights} notti &bull; Media ${formatCurrency(averagePerNight)}/notte</p>`;
                     }
                 }
-
                 const expenseItems = expenses.map(exp => {
-                    const nightsInfo = (exp.category === 'hotels' && exp.nights && exp.nights > 0)
-                        ? `<p class="text-xs text-gray-500 mt-1">${exp.nights} notti &bull; ${formatCurrency(exp.amount / exp.nights)}/notte</p>`
-                        : '';
-                    return `
-                    <li class="expense-item ${exp.onSplid ? 'on-splid' : ''} ${exp.status} p-3 my-1 rounded-md">
-                        <div class="flex justify-between items-start">
-                            <div class="flex-grow pr-4">
-                                <p>${exp.description}</p>
-                                <p class="text-xs text-gray-500">${exp.person}</p>
-                                ${nightsInfo}
-                            </div>
-                            <div class="text-right flex-shrink-0">
-                                <p class="font-semibold">${formatCurrency(exp.amount)}</p>
-                            </div>
-                        </div>
-                        <div class="admin-only-flex justify-between items-center mt-2 pt-2 border-t border-slate-200">
-                            <div class="flex items-center gap-4">
-                                <button data-expense-id="${exp.id}" class="status-toggle px-2 py-1 text-xs rounded font-semibold transition-colors ${exp.status === 'paid' ? 'bg-green-200 text-green-800 hover:bg-green-300' : 'bg-amber-200 text-amber-800 hover:bg-amber-300'}">${exp.status === 'paid' ? 'Pagato' : 'Prenotato'}</button>
-                                <label class="flex items-center gap-1.5 cursor-pointer text-xs text-gray-600">
-                                    <input type="checkbox" data-expense-id="${exp.id}" class="splid-toggle w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 focus:ring-offset-0 focus:ring-1" ${exp.onSplid ? 'checked' : ''}>
-                                    Su Splid
-                                </label>
-                            </div>
-                            <button data-expense-id="${exp.id}" class="delete-expense-btn text-gray-400 hover:text-red-500" title="Elimina spesa">${TRASH_ICON_SVG}</button>
-                        </div>
-                        <div class="user-only flex justify-start items-center gap-2 mt-2 pt-2 border-t border-slate-200 text-xs">
-                            <span class="font-semibold px-2 py-0.5 rounded-full ${exp.status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">${exp.status === 'paid' ? 'Pagato' : 'Prenotato'}</span>
-                            ${exp.onSplid ? '<span class="font-semibold px-2 py-0.5 rounded-full bg-slate-200 text-slate-800">Su Splid</span>' : ''}
-                        </div>
-                    </li>`;
+                    const nightsInfo = (exp.category === 'hotels' && exp.nights && exp.nights > 0) ? `<p class="text-xs text-gray-500 mt-1">${exp.nights} notti &bull; ${formatCurrency(exp.amount / exp.nights)}/notte</p>` : '';
+                    return `<li class="expense-item ${exp.onSplid ? 'on-splid' : ''} ${exp.status} p-3 my-1 rounded-md"><div class="flex justify-between items-start"><div class="flex-grow pr-4"><p>${exp.description}</p><p class="text-xs text-gray-500">${exp.person}</p>${nightsInfo}</div><div class="text-right flex-shrink-0"><p class="font-semibold">${formatCurrency(exp.amount)}</p></div></div><div class="admin-only-flex justify-between items-center mt-2 pt-2 border-t border-slate-200"><div class="flex items-center gap-4"><button data-expense-id="${exp.id}" class="status-toggle px-2 py-1 text-xs rounded font-semibold transition-colors ${exp.status === 'paid' ? 'bg-green-200 text-green-800 hover:bg-green-300' : 'bg-amber-200 text-amber-800 hover:bg-amber-300'}">${exp.status === 'paid' ? 'Pagato' : 'Prenotato'}</button><label class="flex items-center gap-1.5 cursor-pointer text-xs text-gray-600"><input type="checkbox" data-expense-id="${exp.id}" class="splid-toggle w-4 h-4 rounded text-indigo-600 focus:ring-indigo-500 focus:ring-offset-0 focus:ring-1" ${exp.onSplid ? 'checked' : ''}>Su Splid</label></div><button data-expense-id="${exp.id}" class="delete-expense-btn text-gray-400 hover:text-red-500" title="Elimina spesa">${TRASH_ICON_SVG}</button></div><div class="user-only flex justify-start items-center gap-2 mt-2 pt-2 border-t border-slate-200 text-xs"><span class="font-semibold px-2 py-0.5 rounded-full ${exp.status === 'paid' ? 'bg-green-100 text-green-800' : 'bg-amber-100 text-amber-800'}">${exp.status === 'paid' ? 'Pagato' : 'Prenotato'}</span>${exp.onSplid ? '<span class="font-semibold px-2 py-0.5 rounded-full bg-slate-200 text-slate-800">Su Splid</span>' : ''}</div></li>`;
                 }).join('');
-
-                return `<div class="card">
-                        <h4 class="text-lg font-semibold mb-2">${BUDGET_CATEGORIES[catKey]}</h4>
-                        <p class="text-gray-600 mb-2 font-bold text-xl">${formatCurrency(categoryTotal)}</p>
-                        ${categoryHeaderInfo}
-                        <ul class="text-sm">${expenseItems}</ul>
-                    </div>`;
+                return `<div class="card"><h4 class="text-lg font-semibold mb-2">${BUDGET_CATEGORIES[catKey]}</h4><p class="text-gray-600 mb-2 font-bold text-xl">${formatCurrency(categoryTotal)}</p>${categoryHeaderInfo}<ul class="text-sm">${expenseItems}</ul></div>`;
             }).join('');
-
-            // 4. HTML RIEPILOGO PER PERSONA
-            const summaryByPerson = budgetData.expenses.reduce((acc, { person, category, amount }) => {
-                if (!person) return acc;
-                acc[person] = acc[person] || { total: 0, categories: {} };
-                acc[person].total += amount;
-                acc[person].categories[category] = (acc[person].categories[category] || 0) + amount;
-                return acc;
-            }, {});
-
-            const summaryByPersonHTML = Object.keys(summaryByPerson).length > 0 ? `
-                <div class="card">
-                    <h3 class="text-xl font-semibold text-gray-700 mb-4">Riepilogo per Persona</h3>
-                    ${Object.entries(summaryByPerson).map(([person, data]) => `
-                        <div class="mb-4 pb-4 border-b last:border-b-0">
-                            <div class="flex justify-between items-baseline">
-                                <h4 class="font-semibold text-lg text-indigo-700">${person}</h4>
-                                <p class="font-bold text-lg">${formatCurrency(data.total)}</p>
-                            </div>
-                            <ul class="text-sm mt-2">
-                                ${Object.entries(data.categories).map(([cat, catAmount]) => `
-                                    <li class="flex justify-between text-gray-600 py-1">
-                                        <span>${BUDGET_CATEGORIES[cat]}</span>
-                                        <span>${formatCurrency(catAmount)}</span>
-                                    </li>
-                                `).join('')}
-                            </ul>
-                        </div>
-                    `).join('')}
-                </div>` : '';
-
-            // 5. ASSEMBLAGGIO FINALE
-            container.innerHTML = `
-                <div class="card bg-white border-slate-300">
-                    <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
-                        <h2 class="text-2xl font-bold text-gray-800 mb-2 md:mb-0">Riepilogo Budget</h2>
-                        <div class="flex items-center gap-2">
-                            <label for="total-budget-input" class="text-gray-600 font-semibold">Budget Totale:</label>
-                            <span class="user-only text-2xl font-bold text-indigo-600">${formatCurrency(totalBudget)}</span>
-                            <input type="number" id="total-budget-input" value="${totalBudget}" step="1" class="admin-only font-bold text-indigo-600 text-xl p-1 w-32">
-                        </div>
-                    </div>
-                    <div class="mb-3">
-                        <div class="progress-bar">
-                            <div class="bg-green-500 h-full transition-all duration-500" style="width: ${paidPercentage}%;" title="Pagato: ${formatCurrency(totalPaid)}"></div>
-                            <div class="bg-amber-500 h-full transition-all duration-500" style="width: ${bookedPercentage}%;" title="Prenotato: ${formatCurrency(totalBooked)}"></div>
-                        </div>
-                    </div>
-                    <div class="flex flex-wrap justify-between text-sm font-semibold gap-x-4 gap-y-1">
-                        <div class="text-gray-600">
-                            Speso: <span class="font-bold text-green-600">${formatCurrency(totalPaid)}</span> + <span class="font-bold text-amber-500">${formatCurrency(totalBooked)}</span> = <span class="font-bold text-red-500">${formatCurrency(totalSpent)}</span>
-                        </div>
-                        <div class="text-gray-600">
-                            Rimanente: <span class="font-bold text-blue-600">${formatCurrency(remaining)}</span>
-                        </div>
-                    </div>
-                </div>
-                ${adminMode ? adminForm : ''}
-                <div id="budget-summary-by-person" class="mt-6">${summaryByPersonHTML}</div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                    ${categoryCards}
-                </div>
-                <div id="budget-legend" class="card text-sm mt-6"><h4 class="font-semibold mb-2">Legenda</h4><div class="flex flex-wrap gap-x-4 gap-y-2"><div class="flex items-center gap-2"><div class="w-4 h-4 rounded" style="background-color: #f0f9ff; border: 1px solid #bae6fd;"></div><span>Spesa inserita su Splid</span></div><div class="flex items-center gap-2"><div class="w-1 h-4 bg-green-500 rounded"></div><span>Spesa Pagata</span></div><div class="flex items-center gap-2"><div class="w-1 h-4 bg-amber-500 rounded"></div><span>Spesa solo Prenotata</span></div></div></div>`;
+            const summaryByPerson = budgetData.expenses.reduce((acc, { person, category, amount }) => { if (!person) return acc; acc[person] = acc[person] || { total: 0, categories: {} }; acc[person].total += amount; acc[person].categories[category] = (acc[person].categories[category] || 0) + amount; return acc; }, {});
+            const summaryByPersonHTML = Object.keys(summaryByPerson).length > 0 ? `<div class="card"><h3 class="text-xl font-semibold text-gray-700 mb-4">Riepilogo per Persona</h3>${Object.entries(summaryByPerson).map(([person, data]) => `<div class="mb-4 pb-4 border-b last:border-b-0"><div class="flex justify-between items-baseline"><h4 class="font-semibold text-lg text-indigo-700">${person}</h4><p class="font-bold text-lg">${formatCurrency(data.total)}</p></div><ul class="text-sm mt-2">${Object.entries(data.categories).map(([cat, catAmount]) => `<li class="flex justify-between text-gray-600 py-1"><span>${BUDGET_CATEGORIES[cat]}</span><span>${formatCurrency(catAmount)}</span></li>`).join('')}</ul></div>`).join('')}</div>` : '';
+            container.innerHTML = `<div class="card bg-white border-slate-300"><div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4"><h2 class="text-2xl font-bold text-gray-800 mb-2 md:mb-0">Riepilogo Budget</h2><div class="flex items-center gap-2"><label for="total-budget-input" class="text-gray-600 font-semibold">Budget Totale:</label><span class="user-only text-2xl font-bold text-indigo-600">${formatCurrency(totalBudget)}</span><input type="number" id="total-budget-input" value="${totalBudget}" step="1" class="admin-only font-bold text-indigo-600 text-xl p-1 w-32"></div></div><div class="mb-3"><div class="progress-bar"><div class="bg-green-500 h-full transition-all duration-500" style="width: ${paidPercentage}%;" title="Pagato: ${formatCurrency(totalPaid)}"></div><div class="bg-amber-500 h-full transition-all duration-500" style="width: ${bookedPercentage}%;" title="Prenotato: ${formatCurrency(totalBooked)}"></div></div></div><div class="flex flex-wrap justify-between text-sm font-semibold gap-x-4 gap-y-1"><div class="text-gray-600">Speso: <span class="font-bold text-green-600">${formatCurrency(totalPaid)}</span> + <span class="font-bold text-amber-500">${formatCurrency(totalBooked)}</span> = <span class="font-bold text-red-500">${formatCurrency(totalSpent)}</span></div><div class="text-gray-600">Rimanente: <span class="font-bold text-blue-600">${formatCurrency(remaining)}</span></div></div></div>${adminMode ? adminForm : ''}<div id="budget-summary-by-person" class="mt-6">${summaryByPersonHTML}</div><div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">${categoryCards}</div><div id="budget-legend" class="card text-sm mt-6"><h4 class="font-semibold mb-2">Legenda</h4><div class="flex flex-wrap gap-x-4 gap-y-2"><div class="flex items-center gap-2"><div class="w-4 h-4 rounded" style="background-color: #f0f9ff; border: 1px solid #bae6fd;"></div><span>Spesa inserita su Splid</span></div><div class="flex items-center gap-2"><div class="w-1 h-4 bg-green-500 rounded"></div><span>Spesa Pagata</span></div><div class="flex items-center gap-2"><div class="w-1 h-4 bg-amber-500 rounded"></div><span>Spesa solo Prenotata</span></div></div></div>`;
         }
         
         function renderUsefulLinks(linksData, adminMode) {
             const container = document.getElementById('links-content');
-            const linksList = (linksData || []).map(link => `
-                <li class="flex justify-between items-center py-3 border-b border-gray-200 last:border-b-0">
-                    <div><a href="${link.url}" target="_blank" class="font-semibold text-indigo-600 hover:text-indigo-800 hover:underline">${link.title}</a><p class="text-sm text-gray-500">${link.url}</p></div>
-                    <button data-link-id="${link.id}" class="delete-link-btn admin-only text-gray-400 hover:text-red-500 p-2" title="Elimina link">${TRASH_ICON_SVG}</button>
-                </li>`).join('');
-            
-            container.innerHTML = `<div class="card bg-white border-slate-300">
-                    <h2 class="text-2xl font-bold text-gray-800 mb-6">Link Utili</h2>
-                    ${adminMode ? `<div class="card bg-slate-50 border-indigo-300 mb-6 admin-only-grid"><h3 class="text-xl font-semibold text-gray-700 mb-4">Aggiungi Nuovo Link</h3><form id="add-link-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end"><div class="md:col-span-2"><label for="link-title">Titolo</label><input type="text" id="link-title" required></div><div class="md:col-span-2"><label for="link-url">URL</label><input type="url" id="link-url" required></div><div class="md:col-start-4"><button type="submit" class="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700">Aggiungi Link</button></div></form></div>` : ''}
-                    <ul id="useful-links-list">${linksList.length > 0 ? linksList : '<p class="text-gray-500">Nessun link aggiunto.</p>'}</ul>
-                </div>`;
+            const linksList = (linksData || []).map(link => `<li class="flex justify-between items-center py-3 border-b border-gray-200 last:border-b-0"><div><a href="${link.url}" target="_blank" class="font-semibold text-indigo-600 hover:text-indigo-800 hover:underline">${link.title}</a><p class="text-sm text-gray-500">${link.url}</p></div><button data-link-id="${link.id}" class="delete-link-btn admin-only text-gray-400 hover:text-red-500 p-2" title="Elimina link">${TRASH_ICON_SVG}</button></li>`).join('');
+            container.innerHTML = `<div class="card bg-white border-slate-300"><h2 class="text-2xl font-bold text-gray-800 mb-6">Link Utili</h2>${adminMode ? `<div class="card bg-slate-50 border-indigo-300 mb-6 admin-only-grid"><h3 class="text-xl font-semibold text-gray-700 mb-4">Aggiungi Nuovo Link</h3><form id="add-link-form" class="grid grid-cols-1 md:grid-cols-4 gap-4 items-end"><div class="md:col-span-2"><label for="link-title">Titolo</label><input type="text" id="link-title" required></div><div class="md:col-span-2"><label for="link-url">URL</label><input type="url" id="link-url" required></div><div class="md:col-start-4"><button type="submit" class="w-full px-4 py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700">Aggiungi Link</button></div></form></div>` : ''}<ul id="useful-links-list">${linksList.length > 0 ? linksList : '<p class="text-gray-500">Nessun link aggiunto.</p>'}</ul></div>`;
         }
 
         // --- GESTORI DI EVENTI E HANDLER ---
@@ -1177,7 +998,6 @@
             document.getElementById('export-html-btn').addEventListener('click', exportHTML);
             document.getElementById('apply-dates-btn').addEventListener('click', handleDateUpdate);
             
-            // Nuovi listener per i pulsanti JSON
             document.getElementById('export-json-btn').addEventListener('click', exportJSON);
             document.getElementById('import-json-btn').addEventListener('click', () => document.getElementById('import-json-input').click());
             document.getElementById('import-json-input').addEventListener('change', handleJSONImport);
@@ -1332,6 +1152,14 @@
             if (e.target.closest('#add-tour-btn')) addTour();
             const deleteTourBtn = e.target.closest('.delete-tour-btn');
             if (deleteTourBtn) removeTour(parseInt(deleteTourBtn.dataset.tourId));
+
+            const centerMapBtn = e.target.closest('.center-map-btn');
+            if (centerMapBtn) {
+                const lat = centerMapBtn.dataset.lat;
+                const lng = centerMapBtn.dataset.lng;
+                centerMapOnLocation(lat, lng);
+                document.getElementById('map').scrollIntoView({ behavior: 'smooth' });
+            }
         }
         
         // --- LOGICA DI INIZIALIZZAZIONE E AVVIO ---
@@ -1369,7 +1197,7 @@
         
         async function initializeApp() {
             isAdminMode = sessionStorage.getItem('isAdmin') === 'true';
-            currentData = await loadData(); // Attendi il caricamento asincrono
+            currentData = await loadData();
             if(!currentData.usefulLinks) currentData.usefulLinks = [];
             if(!currentData.tours) currentData.tours = [];
             renderApp(currentData, isAdminMode);
