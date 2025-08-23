@@ -292,12 +292,15 @@
                 map.remove();
                 map = null;
             }
-            if (!document.getElementById('map')) return; // Non inizializzare se l'elemento non c'è
+            if (!document.getElementById('map')) return;
 
-            map = L.map('map').setView([36.2048, 138.2529], 5); // Centro del Giappone
+            map = L.map('map').setView([36.2048, 138.2529], 5);
 
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            // MODIFICA: Utilizzo di un tile layer con etichette in inglese (CARTO Voyager)
+            L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+                subdomains: 'abcd',
+                maxZoom: 20
             }).addTo(map);
 
             markerGroup = L.layerGroup().addTo(map);
