@@ -64,8 +64,11 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.2);
             border: 1px solid #ccc;
         }
-        .leaflet-control-layers-base label {
+        .leaflet-control-layers-base label, .leaflet-control-layers-overlays label {
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         @media print {
             body { background-color: white; }
@@ -277,9 +280,8 @@
         // --- GLOBAL VARIABLES ---
         let isAdminMode = false;
         let currentData = null;
-        const DATA_STORAGE_KEY = 'travelPlannerData_Giappone3';
-        let map = null; // Variabile globale per la mappa
-        let markerGroup = null; // Gruppo di marker per la mappa
+        const DATA_STORAGE_KEY = 'travelPlannerData_Giappone4';
+        let map = null; 
 
         // --- DEFAULT DATA (FALLBACK ONLY) ---
         const defaultFullData = {
@@ -299,7 +301,6 @@
             if (map) { map.remove(); map = null; }
             if (!document.getElementById('map')) return;
 
-            // 1. Definire i diversi strati di mappa (tile layers)
             const streetMap = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
                 subdomains: 'abcd',
@@ -315,106 +316,109 @@
 	            attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
             });
 
-            // 2. Inizializzare la mappa con il layer di default
             map = L.map('map', {
                 center: [36.2048, 138.2529],
                 zoom: 5,
-                layers: [streetMap] // Aggiungi il layer di default qui
+                layers: [streetMap]
             });
 
-            // 3. Creare gli oggetti per il controllo dei layer
             const baseMaps = {
                 "Stradale": streetMap,
                 "Satelittare": satelliteMap,
                 "Topografica": topoMap
             };
-
-            markerGroup = L.layerGroup(); 
-
-            const overlayMaps = {
-                "Segnalini Viaggio": markerGroup
-            };
-
-            // 4. Aggiungere il controllo dei layer alla mappa
-            L.control.layers(baseMaps, overlayMaps).addTo(map);
             
-            // Aggiungere i marker al markerGroup e poi il group alla mappa
-            markerGroup.addTo(map);
+            const pathLayer = L.layerGroup();
+            const locationsLayer = L.layerGroup();
+            const accommodationLayer = L.layerGroup();
 
             const formatDateForPopup = (dateString) => {
                 const [_, month, day] = dateString.split('-');
                 return `${day}/${month}`;
             };
-
+            
             const locationsMap = new Map();
+            const accommodationsMap = new Map();
 
             itineraryData.forEach((item) => {
-                const processLocation = (loc, isAccommodation) => {
-                    if (!loc.name || !loc.coords || !loc.coords.lat || !loc.coords.lng) return;
-                    
-                    const key = `${loc.coords.lat},${loc.coords.lng}`;
+                if (item.location && item.location_coords && item.location_coords.lat) {
+                    const key = `${item.location_coords.lat},${item.location_coords.lng}`;
                     if (!locationsMap.has(key)) {
-                        locationsMap.set(key, {
-                            coords: loc.coords,
-                            names: new Set(),
-                            dates: new Map(),
-                            isAccommodation: false
-                        });
+                        locationsMap.set(key, { coords: item.location_coords, names: new Set(), dates: new Map() });
                     }
-                    
                     const entry = locationsMap.get(key);
-                    entry.names.add(loc.name);
-                    if (!entry.dates.has(item.date)) {
-                        entry.dates.set(item.date, item.date);
+                    entry.names.add(item.location);
+                    entry.dates.set(item.date, item.date);
+                }
+                if (item.accommodation && item.accommodation_coords && item.accommodation_coords.lat) {
+                    const key = `${item.accommodation_coords.lat},${item.accommodation_coords.lng}`;
+                     if (!accommodationsMap.has(key)) {
+                        accommodationsMap.set(key, { coords: item.accommodation_coords, names: new Set(), dates: new Map() });
                     }
-                    if (isAccommodation) {
-                        entry.isAccommodation = true;
-                    }
-                };
-
-                processLocation({ name: item.accommodation, coords: item.accommodation_coords }, true);
-                processLocation({ name: item.location, coords: item.location_coords }, false);
+                    const entry = accommodationsMap.get(key);
+                    entry.names.add(item.accommodation);
+                    entry.dates.set(item.date, item.date);
+                }
             });
 
-            const allMarkers = [];
-            const markersForBounds = [];
-
-            const isInItaly = (lat, lng) => {
-                return lat > 36 && lat < 47 && lng > 6 && lng < 19;
-            };
-
+            const locationMarkers = [];
             locationsMap.forEach(loc => {
                 const sortedDates = [...loc.dates.keys()].sort();
-                const dateLinks = sortedDates.map(date =>
-                    `<a href="#" class="popup-date-link text-indigo-600 hover:underline p-1" data-date="${date}">${formatDateForPopup(date)}</a>`
-                ).join(', ');
-
+                const dateLinks = sortedDates.map(date => `<a href="#" class="popup-date-link text-indigo-600 hover:underline p-1" data-date="${date}">${formatDateForPopup(date)}</a>`).join(', ');
                 const title = [...loc.names].join(' / ');
                 const popupContent = `<b>${title}</b><br><div class="mt-2"><b>Date:</b> ${dateLinks}</div>`;
-
-                const iconOptions = loc.isAccommodation ? {
+                const marker = L.marker([loc.coords.lat, loc.coords.lng], {
                     icon: new L.Icon({
                         iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
                         shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
                         iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
                     })
-                } : {};
-
-                const marker = L.marker([loc.coords.lat, loc.coords.lng], iconOptions).bindPopup(popupContent);
-                markerGroup.addLayer(marker);
-                allMarkers.push(marker);
-
-                if (!isInItaly(loc.coords.lat, loc.coords.lng)) {
-                    markersForBounds.push(marker);
-                }
+                }).bindPopup(popupContent);
+                locationsLayer.addLayer(marker);
+                locationMarkers.push(marker);
             });
+            
+            accommodationsMap.forEach(loc => {
+                const sortedDates = [...loc.dates.keys()].sort();
+                const dateLinks = sortedDates.map(date => `<a href="#" class="popup-date-link text-indigo-600 hover:underline p-1" data-date="${date}">${formatDateForPopup(date)}</a>`).join(', ');
+                const title = [...loc.names].join(' / ');
+                const popupContent = `<b>${title}</b><br><div class="mt-2"><b>Date:</b> ${dateLinks}</div>`;
+                const marker = L.marker([loc.coords.lat, loc.coords.lng], {
+                    icon: new L.Icon({
+                        iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+                        shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                        iconSize: [25, 41], iconAnchor: [12, 41], popupAnchor: [1, -34], shadowSize: [41, 41]
+                    })
+                }).bindPopup(popupContent);
+                accommodationLayer.addLayer(marker);
+            });
+            
+            const routePoints = itineraryData
+                .map(item => item.location_coords)
+                .filter(coords => coords && coords.lat && coords.lng);
+            
+            if (routePoints.length > 1) {
+                const polyline = L.polyline(routePoints, { color: 'red', weight: 3, opacity: 0.7 });
+                pathLayer.addLayer(polyline);
+            }
+
+            const overlayMaps = {
+                "<i class='pr-1'>&#128205;</i> Località": locationsLayer,
+                "<i class='pr-1'>&#127759;</i> Percorso": pathLayer,
+                "<i class='pr-1'>&#127974;</i> Alloggi": accommodationLayer
+            };
+
+            L.control.layers(baseMaps, overlayMaps).addTo(map);
+            locationsLayer.addTo(map); // Visibile di default
+            pathLayer.addTo(map); // Visibile di default
+
+            const isInItaly = (lat, lng) => lat > 36 && lat < 47 && lng > 6 && lng < 19;
+            const markersForBounds = locationMarkers.filter(marker => !isInItaly(marker.getLatLng().lat, marker.getLatLng().lng));
 
             if (markersForBounds.length > 0) {
-                const groupBounds = L.featureGroup(markersForBounds).getBounds();
-                map.fitBounds(groupBounds.pad(0.1));
-            } else if (allMarkers.length > 0) {
-                const groupBounds = L.featureGroup(allMarkers).getBounds();
-                map.fitBounds(groupBounds.pad(0.1));
+                map.fitBounds(L.featureGroup(markersForBounds).getBounds().pad(0.1));
+            } else if (locationMarkers.length > 0) {
+                map.fitBounds(L.featureGroup(locationMarkers).getBounds().pad(0.1));
             }
         }
 
