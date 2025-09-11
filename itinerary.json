@@ -19,7 +19,7 @@
       "title": "Kansai(Osaka)→Bologna",
       "depAirport": "Aeroporto internazionale del Kansai (KIX)",
       "arrAirport": "Aeroporto di Bologna (BLQ)",
-      "depTime": "2025-11-29T22:50",
+      "depTime": "2025-11-29T22:30",
       "arrTime": "2025-11-30T09:55",
       "depTz": 9,
       "arrTz": 1
@@ -283,7 +283,7 @@
       "isFlight": true,
       "isCruise": false,
       "accommodation": "Volo per l'Italia",
-      "activities": "È il nostro ultimo giorno in Giappone. Dopo il check-out, lasceremo i bagagli in hotel o negli armadietti della stazione di Kyoto per goderci la giornata. La mattinata sarà dedicata allo shopping dell'ultimo minuto nel gigantesco complesso della stazione, esplorando negozi come Isetan e The Cube, o in alternativa, facendo un'ultima visita culturale al vicino Tempio To-ji. Dopo un pranzo rilassato, avremo ancora tempo per qualche acquisto. Intorno alle 18:30, recupereremo i bagagli e prenderemo il treno Haruka Express per l'aeroporto del Kansai (KIX), per arrivare in tempo per il nostro volo delle 22:50.",
+      "activities": "È il nostro ultimo giorno in Giappone. Dopo il check-out, lasceremo i bagagli in hotel o negli armadietti della stazione di Kyoto per goderci la giornata. La mattinata sarà dedicata allo shopping dell'ultimo minuto nel gigantesco complesso della stazione, esplorando negozi come Isetan e The Cube, o in alternativa, facendo un'ultima visita culturale al vicino Tempio To-ji. Dopo un pranzo rilassato, avremo ancora tempo per qualche acquisto. Intorno alle 18:00, recupereremo i bagagli e prenderemo il treno Haruka Express per l'aeroporto del Kansai (KIX), per arrivare in tempo per il nostro volo delle 22:30.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20185142.png",
       "location_coords": null
     },
