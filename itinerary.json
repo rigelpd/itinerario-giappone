@@ -143,11 +143,11 @@
     },
     {
       "date": "2025-11-21",
-      "location": "Tokyo",
+      "location": "Hiroshima",
       "isFlight": false,
       "isCruise": false,
-      "accommodation": "Hotel Sunroute Plaza Shinjuku",
-      "activities": "Per l'ultimo giorno a Tokyo, visitiamo il Museo Ghibli (biglietti da acquistare online con largo anticipo) o esploriamo l'isola artificiale di Odaiba, raggiungibile con la monorotaia Yurikamome. Qui troveremo architetture futuristiche, il museo digitale teamLab Borderless (da prenotare) e una replica della Statua della Libertà, per un'esperienza diversa dal solito.",
+      "accommodation": "Rihga Royal Hotel",
+      "activities": "La mattina ci svegliamo alle 5 e partiamo da Tokyo con Shinkansen per Hiroshima, se prendiamo treno delle 6 dalla stazione di tokyo arrivamo alle 9:50 a Hiroshima, poi treno e ferry e intorno alle 11 siamo a Myiajima, vediamo il posto e poi la sera torniamo a Hiroshima per dormire al Rihga Royal Hotel.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184514.png",
       "location_coords": {
         "lat": 35.6768601,
@@ -164,7 +164,7 @@
       "isFlight": false,
       "isCruise": false,
       "accommodation": "Nishiyama Ryokan",
-      "activities": "Mattinata dedicata al trasferimento a Kyoto con il treno Shinkansen (circa 2 ore e mezza). Raggiungiamo il Nishiyama Ryokan per un'autentica esperienza giapponese. Nel pomeriggio, esploriamo il Nishiki Market, \"la cucina di Kyoto\". Per la serata, ci immergiamo nell'atmosfera magica di Gion, l'antico quartiere delle geishe.",
+      "activities": "Mattinata vediamo Hiroshima, poi a mezzogiorno prendiamo il treno (durata un ora) per Himeji con arrivo alle 13, qui vediamo il castello Airone bianco, poi treno per Kyoto (durata un ora) e raggiungiamo il Nishiyama Ryokan. Per la serata, ci immergiamo nell'atmosfera magica di Gion, l'antico quartiere delle geishe.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184636.png",
       "location_coords": {
         "lat": 35.0115754,
@@ -228,11 +228,11 @@
     },
     {
       "date": "2025-11-26",
-      "location": "Himeji",
+      "location": "Kyoto",
       "isFlight": false,
       "isCruise": false,
       "accommodation": "HIYORI Stay Kyoto Kamogawa",
-      "activities": "L'escursione di oggi ci porta al castello più bello del Giappone. Prendiamo uno Shinkansen da Kyoto per Himeji (circa 1 ora). Visitiamo il Castello di Himeji, noto come \"I'Airone Bianco\", una magnifica struttura originale del periodo feudale. Successivamente, esploriamo il vicino\ngiardino Koko-en prima di rientrare a Kyoto nel tardo pomeriggio.",
+      "activities": "Giornata intera a Kyoto",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184838.png",
       "location_coords": {
         "lat": 34.8153529,
@@ -262,11 +262,11 @@
     },
     {
       "date": "2025-11-28",
-      "location": "Hiroshima",
+      "location": "Kyoto",
       "isFlight": false,
       "isCruise": false,
       "accommodation": "HIYORI Stay Kyoto Kamogawa",
-      "activities": "Escursione intensa ma imperdibile. Partiamo molto presto da Kyoto con lo Shinkansen per Hiroshima (1h 40m). Dedichiamo la mattinata al Parco e al Museo della Pace. Dopo pranzo, treno e traghetto per l'isola di Miyajima per ammirare il famoso torii \"galleggiante\" del Santuario di Itsukushima. Possiamo anche salire sul Monte Misen per una vista spettacolare. Rientro a Kyoto in tarda serata.",
+      "activities": "Giornata intera a Kyoto",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20185004.png",
       "location_coords": {
         "lat": 34.3917241,
@@ -315,16 +315,6 @@
         "onSplid": true
       },
       {
-        "id": 1755870266762,
-        "description": "Hotel a Tokyo",
-        "amount": 1224,
-        "category": "hotels",
-        "person": "Margherita",
-        "status": "booked",
-        "onSplid": false,
-        "nights": 7
-      },
-      {
         "id": 1755870303651,
         "description": "Ryokan a Kyoto",
         "amount": 394,
@@ -343,6 +333,26 @@
         "status": "booked",
         "onSplid": false,
         "nights": 6
+      },
+      {
+        "id": 1758882475192,
+        "description": "Hotel a Tokyo",
+        "amount": 1028,
+        "category": "hotels",
+        "person": "Margherita",
+        "status": "booked",
+        "onSplid": false,
+        "nights": 6
+      },
+      {
+        "id": 1758882508825,
+        "description": "Hotel a Hiroshima",
+        "amount": 103,
+        "category": "hotels",
+        "person": "Margherita",
+        "status": "booked",
+        "onSplid": false,
+        "nights": 1
       }
     ]
   },
@@ -426,19 +436,18 @@
   "route": [
     "Bologna",
     "Tokyo",
+    "Tokyo",
+    "Tokyo",
     "Nikko",
     "Tokyo",
     "Hakone",
-    "Tokyo",
+    "Hiroshima/MyiaJima",
+    "Kyoto",
     "Kyoto",
     "Osaka",
-    "Kyoto",
     "Nara",
     "Kyoto",
-    "Himeji",
     "Kyoto",
-    "Hiroshima",
-    "Kyoto",
-    "Bologna"
+    "Volo per l'Italia"
   ]
 }
