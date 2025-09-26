@@ -263,7 +263,7 @@
 
     <script>
         // --- CONFIGURATION ---
-        const SITE_ACCESS_PASSWORD = 'Giappone2025';
+        const SITE_ACCESS_PASSWORD = 'Filippine2026';
         const ADMIN_PASSWORD = 'Kerrickleo';
         const PDF_QUALITY_PRESETS = {
             low:    { scale: 1.5, jpegQuality: 0.6, text: 'Bassa' },
@@ -307,7 +307,7 @@
         // --- GLOBAL VARIABLES ---
         let isAdminMode = false;
         let currentData = null;
-        const DATA_STORAGE_KEY = 'travelPlannerData_Giappone6';
+        const DATA_STORAGE_KEY = 'travelPlannerData_Filippine2';
         let map = null; 
         let tempRoute = [];
 
@@ -935,6 +935,14 @@
                 const centerMapButton = (item.location_coords && item.location_coords.lat) 
                     ? `<button class="center-map-btn p-2 text-gray-400 hover:text-indigo-600" title="Mostra sulla mappa" data-lat="${item.location_coords.lat}" data-lng="${item.location_coords.lng}">${centerMapIconSvg}</button>`
                     : '';
+                
+                // --- FIX START ---
+                // Create the HTML for the control buttons, only if in admin mode and an image exists
+                const imageControlsHTML = (hasImage && adminMode) ? `
+                    <button class="github-open-btn p-2 bg-white text-gray-800 rounded-full shadow-md hover:bg-gray-200" data-target-id="${dayId}" title="Cambia immagine">${PENCIL_ICON_SVG}</button>
+                    <button class="remove-image-btn p-2 bg-red-500 text-white rounded-full shadow-md hover:bg-red-600" data-target-id="${dayId}" title="Rimuovi immagine">${TRASH_ICON_SVG}</button>
+                ` : '';
+                // --- FIX END ---
 
                 return `<div class="card day-card flex flex-col md:flex-row gap-6 items-stretch day-card-wrapper" data-date="${item.date}">
                         <div class="w-full md:w-1/2 flex flex-col">
@@ -951,7 +959,10 @@
                             <div id="${dayId}-image-placeholder" class="image-placeholder w-full h-full bg-slate-200 rounded-lg items-center justify-center border-2 border-dashed border-gray-400" style="display: ${hasImage ? 'none' : 'flex'}">
                                  <div class="text-center text-gray-600"><div class="admin-only-flex justify-center gap-4"><label for="${dayId}-image-input" class="px-4 py-2 bg-white border border-gray-300 rounded-lg shadow-sm cursor-pointer hover:bg-gray-50 text-sm">Carica File</label><button class="github-open-btn px-4 py-2 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-900 text-sm" data-target-id="${dayId}">da GitHub</button></div><p class="user-only font-semibold">Nessuna immagine</p></div>
                             </div>
-                            <div id="${dayId}-image-controls" class="image-controls admin-only-flex absolute top-2 right-2 gap-2 z-10" style="display: ${hasImage && adminMode ? 'flex' : 'none'};"></div>
+                            <div id="${dayId}-image-controls" class="image-controls admin-only-flex absolute top-2 right-2 gap-2 z-10" style="display: ${hasImage && adminMode ? 'flex' : 'none'};">
+                                <!-- FIX: Buttons are now inserted here -->
+                                ${imageControlsHTML}
+                            </div>
                             <input type="file" id="${dayId}-image-input" class="hidden" accept="image/*">
                         </div>
                     </div>`;
