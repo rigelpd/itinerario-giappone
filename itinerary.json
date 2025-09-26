@@ -35,8 +35,8 @@
       "activities": "Partenza dall'aeroporto di Bologna alle 19:35. Arriveremo con almeno 3 ore di anticipo per check-in e controlli.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/casa.png",
       "location_coords": {
-        "lat": 44.49421141,
-        "lng": 11.34341832
+        "lat": 44.571608,
+        "lng": 11.31967
       }
     },
     {
@@ -48,12 +48,12 @@
       "activities": "Atterreremo all'aeroporto di Tokyo (HND) alle 19:45 ora locale. Sbrigate le formalità doganali, raggiungeremo I'Hotel Sunroute Plaza Shinjuku in taxi o con il comodo \"Limousine Bus\". Dopo il check-in, avremo la serata libera per una prima passeggiata e una cena nel vivace quartiere di Shinjuku.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20183810.png",
       "location_coords": {
-        "lat": 35.6768601,
-        "lng": 139.7638947
+        "lat": 35.70149,
+        "lng": 139.775427
       },
       "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
+        "lat": 35.687376,
+        "lng": 139.698889
       }
     },
     {
@@ -65,12 +65,12 @@
       "activities": "Dedichiamo la giornata all'esplorazione dei quartieri iconici di Tokyo. Iniziamo con l'ipnotico incrocio di Shibuya e la statua di Hachiko. Proseguiamo per Harajuku, passeggiando lungo la vivace Takeshita Street, cuore della cultura giovanile. Concludiamo la giornata nella quiete del vicino Santuario Meiji Jingu, un'oasi di pace immersa in una foresta.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/tokyo.jpg",
       "location_coords": {
-        "lat": 35.6768601,
-        "lng": 139.7638947
+        "lat": 35.70149,
+        "lng": 139.775427
       },
       "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
+        "lat": 35.687376,
+        "lng": 139.698889
       }
     },
     {
@@ -82,12 +82,12 @@
       "activities": "Esploriamo la parte più tradizionale di Tokyo. La mattina visitiamo Asakusa, con il suo Tempio Senso-ji e la via dello shopping Nakamise-dori. Successivamente, ci spostiamo al Parco di Ueno, dove potremo visitare musei o lo zoo. Nel pomeriggio, ci immergiamo nella cultura \"otaku\" di Akihabara, il quartiere dell'elettronica, dei manga e degli anime.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184018.png",
       "location_coords": {
-        "lat": 35.6768601,
-        "lng": 139.7638947
+        "lat": 35.70149,
+        "lng": 139.775427
       },
       "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
+        "lat": 35.687376,
+        "lng": 139.698889
       }
     },
     {
@@ -99,12 +99,12 @@
       "activities": "Giornata dedicata all'escursione a Nikko, sito UNESCO. Partiamo presto da Asakusa con i treni Tobu (consigliato il \"Nikko Pass\", viaggio di circa 2 ore). Arrivati, un bus locale porterà ai templi. Visitiamo il sontuoso Santuario Toshogu, il Tempio Rinnoji e il Santuario Futarasan. Nel pomeriggio, ammiriamo il ponte Shinkyo prima di riprendere il treno per Tokyo.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184253.png",
       "location_coords": {
-        "lat": 36.7197576,
-        "lng": 139.698139
+        "lat": 36.724152,
+        "lng": 139.701731
       },
       "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
+        "lat": 35.687376,
+        "lng": 139.698889
       }
     },
     {
@@ -116,12 +116,12 @@
       "activities": "Iniziamo la giornata con una colazione al Mercato Esterno di Tsukiji. Proseguiamo verso Ginza, il quartiere del lusso, per ammirare le vetrine e le architetture. Nel pomeriggio,\nvisitiamo i tranquilli Giardini Orientali del Palazzo Imperiale. Concludiamo la giornata sulla Tokyo Skytree (prenotazione consigliata) per una vista mozzafiato al tramonto.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184319.png",
       "location_coords": {
-        "lat": 35.6768601,
-        "lng": 139.7638947
+        "lat": 35.70149,
+        "lng": 139.775427
       },
       "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
+        "lat": 35.687376,
+        "lng": 139.698889
       }
     },
     {
@@ -133,12 +133,12 @@
       "activities": "Partenza di buon'ora da Shinjuku per Hakone. Utilizziamo I'\"Hakone Free Pass\" per i trasporti. Seguiamo il classico \"Hakone Loop\": ammiriamo il lago Ashi in battello, saliamo\nsulla funivia Owakudani per vedere le sorgenti sulfuree e, con un po' di fortuna, godere di una vista spettacolare sul Monte Fuji. Non ci perdiamo il Santuario di Hakone. Rientro Tokyo in serata.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184409.png",
       "location_coords": {
-        "lat": 35.2323662,
-        "lng": 139.1068849
+        "lat": 35.237103,
+        "lng": 139.120233
       },
       "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
+        "lat": 35.687376,
+        "lng": 139.698889
       }
     },
     {
@@ -150,12 +150,12 @@
       "activities": "La mattina ci svegliamo alle 5 e partiamo da Tokyo con Shinkansen per Hiroshima, se prendiamo treno delle 6 dalla stazione di tokyo arrivamo alle 9:50 a Hiroshima, poi treno e ferry e intorno alle 11 siamo a Myiajima, vediamo il posto e poi la sera torniamo a Hiroshima per dormire al Rihga Royal Hotel.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184514.png",
       "location_coords": {
-        "lat": 35.6768601,
-        "lng": 139.7638947
+        "lat": 34.395255,
+        "lng": 132.468662
       },
       "accommodation_coords": {
-        "lat": 35.6870907,
-        "lng": 139.6988811
+        "lat": 34.397953,
+        "lng": 132.457415
       }
     },
     {
@@ -167,12 +167,12 @@
       "activities": "Mattinata vediamo Hiroshima, poi a mezzogiorno prendiamo il treno (durata un ora) per Himeji con arrivo alle 13, qui vediamo il castello Airone bianco, poi treno per Kyoto (durata un ora) e raggiungiamo il Nishiyama Ryokan. Per la serata, ci immergiamo nell'atmosfera magica di Gion, l'antico quartiere delle geishe.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184636.png",
       "location_coords": {
-        "lat": 35.0115754,
-        "lng": 135.7681441
+        "lat": 35.012521,
+        "lng": 135.763292
       },
       "accommodation_coords": {
-        "lat": 35.0131307,
-        "lng": 135.7662572
+        "lat": 35.013512,
+        "lng": 135.766414
       }
     },
     {
@@ -184,12 +184,12 @@
       "activities": "Oggi ci trasferiamo all'HIYORI Stay Kyoto Kamogawa. Dedichiamo poi la giornata alla scoperta della parte orientale di Kyoto. Iniziamo dal Fushimi Inari Shrine con i suoi famosi portali rossi, poi visitiamo il Kiyomizu-dera per la sua vista panoramica. Passeggiamo per le storiche stradine di Higashiyama, Sannenzaka e Ninnenzaka, e concludiamo con una visita al Santuario Yasaka.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184550.png",
       "location_coords": {
-        "lat": 35.0115754,
-        "lng": 135.7681441
+        "lat": 35.012521,
+        "lng": 135.763292
       },
       "accommodation_coords": {
-        "lat": 34.99266887,
-        "lng": 135.7681232
+        "lat": 34.995267,
+        "lng": 135.767616
       }
     },
     {
@@ -201,12 +201,12 @@
       "activities": "Giornata nella vivace Osaka, raggiungibile in 30 minuti di treno JR da Kyoto. Visitiamo l'imponente Castello di Osaka, poi esploriamo il quartiere di Shinsaibashi per lo shopping. La serata è a Dotonbori, il cuore pulsante della città, con le sue insegne al neon e l'incredibile street food. Assaggiamo takoyaki e okonomiyaki prima di rientrare a Kyoto.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184727.png",
       "location_coords": {
-        "lat": 34.6937569,
-        "lng": 135.5014539
+        "lat": 34.711176,
+        "lng": 135.49952
       },
       "accommodation_coords": {
-        "lat": 34.99266887,
-        "lng": 135.7681232
+        "lat": 34.995267,
+        "lng": 135.767616
       }
     },
     {
@@ -218,12 +218,12 @@
       "activities": "Oggi andiamo a Nara, raggiungibile in 45 minuti di treno JR da Kyoto. L'attrazione principale è il Parco di Nara, dove i cervi girano liberamente. All'interno del parco, visitiamo il Tempio Todai-ji con la sua enorme statua del Buddha e il Santuario Kasuga Taisha, famoso per le migliaia di lanterne. Una gita facile e rilassante, con rientro a Kyoto in serata.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184808.png",
       "location_coords": {
-        "lat": 34.2963089,
-        "lng": 135.8816819
+        "lat": 34.689536,
+        "lng": 135.806579
       },
       "accommodation_coords": {
-        "lat": 34.99266887,
-        "lng": 135.7681232
+        "lat": 34.995267,
+        "lng": 135.767616
       }
     },
     {
@@ -235,12 +235,12 @@
       "activities": "Giornata intera a Kyoto",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184838.png",
       "location_coords": {
-        "lat": 34.8153529,
-        "lng": 134.6854793
+        "lat": 35.012521,
+        "lng": 135.763292
       },
       "accommodation_coords": {
-        "lat": 34.99266887,
-        "lng": 135.7681232
+        "lat": 34.995267,
+        "lng": 135.767616
       }
     },
     {
@@ -252,12 +252,12 @@
       "activities": "Dedichiamo l'ultimo giorno a Kyoto alla parte nordoccidentale. Iniziamo dalla suggestiva foresta di bambù di Arashiyama e visitiamo il vicino Tempio Tenryu-ji. Nel pomeriggio, ammiriamo il Kinkaku-ji, il famoso Padiglione d'Oro. Se avanza tempo, una visita al Tempio Ryoan-ji, con il suo enigmatico giardino di rocce, completerà la giornata.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20184918.png",
       "location_coords": {
-        "lat": 35.0115754,
-        "lng": 135.7681441
+        "lat": 35.012521,
+        "lng": 135.763292
       },
       "accommodation_coords": {
-        "lat": 34.99266887,
-        "lng": 135.7681232
+        "lat": 34.995267,
+        "lng": 135.767616
       }
     },
     {
@@ -269,12 +269,12 @@
       "activities": "Giornata intera a Kyoto",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20185004.png",
       "location_coords": {
-        "lat": 34.3917241,
-        "lng": 132.4517589
+        "lat": 35.012521,
+        "lng": 135.763292
       },
       "accommodation_coords": {
-        "lat": 34.99266887,
-        "lng": 135.7681232
+        "lat": 34.995267,
+        "lng": 135.767616
       }
     },
     {
@@ -285,7 +285,14 @@
       "accommodation": "Volo per l'Italia",
       "activities": "È il nostro ultimo giorno in Giappone. Dopo il check-out, lasceremo i bagagli in hotel o negli armadietti della stazione di Kyoto per goderci la giornata. La mattinata sarà dedicata allo shopping dell'ultimo minuto nel gigantesco complesso della stazione, esplorando negozi come Isetan e The Cube, o in alternativa, facendo un'ultima visita culturale al vicino Tempio To-ji. Dopo un pranzo rilassato, avremo ancora tempo per qualche acquisto. Intorno alle 18:00, recupereremo i bagagli e prenderemo il treno Haruka Express per l'aeroporto del Kansai (KIX), per arrivare in tempo per il nostro volo delle 22:30.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/Screenshot%202025-08-04%20185142.png",
-      "location_coords": null
+      "location_coords": {
+        "lat": 34.432382,
+        "lng": 135.236627
+      },
+      "accommodation_coords": {
+        "lat": 34.432382,
+        "lng": 135.236627
+      }
     },
     {
       "date": "2025-11-30",
@@ -296,8 +303,8 @@
       "activities": "L'arrivo a Bologna è previsto per le 9:55.",
       "image": "https://raw.githubusercontent.com/rigelpd/itinerario-giappone/main/casa.png",
       "location_coords": {
-        "lat": 44.49421141,
-        "lng": 11.34341832
+        "lat": 44.571608,
+        "lng": 11.31967
       }
     }
   ],
@@ -436,18 +443,15 @@
   "route": [
     "Bologna",
     "Tokyo",
-    "Tokyo",
-    "Tokyo",
     "Nikko",
     "Tokyo",
     "Hakone",
-    "Hiroshima/MyiaJima",
+    "Tokyo",
+    "Hiroshima",
     "Kyoto",
-    "Kyoto",
-    "Osaka",
     "Nara",
     "Kyoto",
-    "Kyoto",
-    "Volo per l'Italia"
+    "Osaka",
+    "Kyoto"
   ]
 }
