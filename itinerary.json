@@ -347,8 +347,8 @@
         "amount": 1028,
         "category": "hotels",
         "person": "Margherita",
-        "status": "booked",
-        "onSplid": false,
+        "status": "paid",
+        "onSplid": true,
         "nights": 6
       },
       {
@@ -360,6 +360,15 @@
         "status": "booked",
         "onSplid": false,
         "nights": 1
+      },
+      {
+        "id": 1761153886200,
+        "description": "Treno da Tokyo a Hiroshima",
+        "amount": 252,
+        "category": "misc",
+        "person": "Leonardo",
+        "status": "paid",
+        "onSplid": true
       }
     ]
   },
