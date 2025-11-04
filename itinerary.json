@@ -369,6 +369,15 @@
         "person": "Leonardo",
         "status": "paid",
         "onSplid": true
+      },
+      {
+        "id": 1762276923719,
+        "description": "Assicurazione sanitaria ",
+        "amount": 99.56,
+        "category": "misc",
+        "person": "Margherita",
+        "status": "paid",
+        "onSplid": true
       }
     ]
   },
